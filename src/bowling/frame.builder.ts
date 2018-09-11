@@ -27,10 +27,14 @@ export interface IFrame {
 }
 
 class Frame implements IFrame {
-  constructor(public throws: IThrow[] = []) {}
+  throws: IThrow[] = [];
 
   addThrow(_throw: IThrow) {
     this.throws.push(_throw);
+  }
+
+  isFinished(): boolean {
+    return this.throws.length === 2;
   }
 }
 
@@ -40,21 +44,19 @@ export class FrameBuilder {
 
     let currentFrame = new Frame();
 
-    let frameThrows = [];
-
     for (let _throw of throws) {
+      currentFrame.addThrow(_throw);
+
       switch (_throw.constructor) {
         case StrikeThrow:
-          frames.push(new Frame([ _throw ]));
-          frameThrows = [];
+          frames.push(currentFrame);
+          currentFrame = new Frame();
           break;
-        default:
-          frameThrows.push(_throw);
       }
 
-      if (frameThrows.length === 2) {
-        frames.push(new Frame(frameThrows));
-        frameThrows = [];
+      if (currentFrame.isFinished()) {
+        frames.push(currentFrame);
+        currentFrame = new Frame();
       }
     }
 
