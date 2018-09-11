@@ -12,6 +12,14 @@ class GutterballThrow implements IThrow {
   score = 0;
 }
 
+class StrikeThrow implements IThrow {
+  score = 10;
+}
+
+class SpareThrow implements IThrow {
+  score = 10;
+}
+
 //type Throw = GutterballThrow;
 
 class ThrowFactory {
@@ -19,6 +27,10 @@ class ThrowFactory {
     switch (_throw) {
       case "-":
         return new GutterballThrow();
+      case "X":
+        return new StrikeThrow();
+      case "-":
+        return new SpareThrow();
     }
   }
 }
