@@ -4,23 +4,20 @@ export class FrameScorer {
   scoreFrames(frames: IFrame[]): number {
     let score = 0;
 
-    let frameScore = 0;
-    let previousFrame: any;
+    let nextFrameBaseScore;
 
-    for (let frameNumber in frames) {
-      const frame = frames[frameNumber];
-
-      if (parseInt(frameNumber) > 0) {
-        previousFrame = frames[parseInt(frameNumber) - 1];
-      }
-
-      if (previousFrame && previousFrame.score === 20) {
-        frameScore += 20;
+    for (let frame of frames) {
+      if (frame.score === 20) {
+        if (nextFrameBaseScore) {
+          nextFrameBaseScore += 20;
+        } else {
+          nextFrameBaseScore = 0;
+        }
       } else {
-        frameScore = 0;
+        nextFrameBaseScore = 0;
       }
 
-      score += frame.score + frameScore;
+      score += frame.score + nextFrameBaseScore;
     }
 
     return score;
