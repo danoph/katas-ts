@@ -34,7 +34,7 @@ class Frame implements IFrame {
   }
 
   isFinished(): boolean {
-    return this.throws.length === 2;
+    return this.throws.length === 2 || !!(this.throws.find(_throw => _throw.constructor === StrikeThrow));
   }
 }
 
@@ -46,13 +46,6 @@ export class FrameBuilder {
 
     for (let _throw of throws) {
       currentFrame.addThrow(_throw);
-
-      switch (_throw.constructor) {
-        case StrikeThrow:
-          frames.push(currentFrame);
-          currentFrame = new Frame();
-          break;
-      }
 
       if (currentFrame.isFinished()) {
         frames.push(currentFrame);
