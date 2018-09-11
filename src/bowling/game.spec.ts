@@ -18,7 +18,7 @@ describe('Game', () => {
         game = new Game(frames);
       });
 
-      it('is worth 0', () => {
+      fit('is worth 0', () => {
         expect(game.score()).toEqual(0);
       });
     });
