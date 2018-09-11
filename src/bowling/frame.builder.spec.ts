@@ -108,16 +108,29 @@ describe('FrameBuilder', () => {
       });
     });
 
-    //describe('knocking down 10 pins requires a spare', () => {
+    //describe('throwing strike on second throw', () => {
       //beforeEach(() => {
-        //frames = "55" + "-".repeat(18);
+        //throws = [
+          //new NormalThrow('3'),
+          //new NormalThrow('X'),
+        //]
       //});
 
       //it('throws an exception', () => {
-        //expect(() => new Game(frames)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
+        //expect(() => subject.buildFrames(throws)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
       //});
     //});
   });
+
+    //describe('strikes must be thrown at the start of a frame', () => {
+      //beforeEach(() => {
+        //frames = "-X" + "-".repeat(18);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
+      //});
+    //});
 
     //describe('not enough strikes', () => {
       //beforeEach(() => {
@@ -136,26 +149,6 @@ describe('FrameBuilder', () => {
 
       //it('throws an exception', () => {
         //expect(() => new Game(frames)).toThrowError(Error, "Game too long - should not accept a game that is too long");
-      //});
-    //});
-
-    //describe('knocking down 10 pins requires a spare', () => {
-      //beforeEach(() => {
-        //frames = "55" + "-".repeat(18);
-      //});
-
-      //it('throws an exception', () => {
-        //expect(() => new Game(frames)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
-      //});
-    //});
-
-    //describe('strikes must be thrown at the start of a frame', () => {
-      //beforeEach(() => {
-        //frames = "-X" + "-".repeat(18);
-      //});
-
-      //it('throws an exception', () => {
-        //expect(() => new Game(frames)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
       //});
     //});
 });
