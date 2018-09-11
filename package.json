@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jasmine": "^2.8.6",
+    "@types/jasmine": "^2.8.8",
+    "@types/node": "^10.9.4",
     "jasmine-ts": "^0.2.1",
     "typescript": "^2.8.3"
   },
@@ -18,4 +19,3 @@
     "jasmine-spec-reporter": "^4.2.1"
   }
 }
-

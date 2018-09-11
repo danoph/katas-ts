@@ -2,9 +2,23 @@
 # yarn lockfile v1
 
 
-"@types/jasmine@^2.8.6":
+"@types/jasmine-expect@^3.8.1":
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/@types/jasmine-expect/-/jasmine-expect-3.8.1.tgz#80e3b345831ca2217873030e920f599e45881ca1"
+  dependencies:
+    jasmine-expect "*"
+
+"@types/jasmine@^2.8.8":
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.8.8.tgz#bf53a7d193ea8b03867a38bfdb4fbb0e0bf066c9"
+
+"@types/node@^10.9.4":
+  version "10.9.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
+
+add-matchers@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/add-matchers/-/add-matchers-0.5.0.tgz#502190e4750cd5721618393268b61a157366e765"
 
 ansi-regex@^2.0.0:
   version "2.1.1"
@@ -216,6 +230,12 @@ isexe@^2.0.0:
 jasmine-core@~2.99.0:
   version "2.99.1"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.99.1.tgz#e6400df1e6b56e130b61c4bcd093daa7f6e8ca15"
+
+jasmine-expect@*, jasmine-expect@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/jasmine-expect/-/jasmine-expect-3.8.4.tgz#099d3923f0b3746c01e50faaa64689fd76fc9c2f"
+  dependencies:
+    add-matchers "0.5.0"
 
 jasmine-spec-reporter@^4.2.1:
   version "4.2.1"
