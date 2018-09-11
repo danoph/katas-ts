@@ -1,4 +1,7 @@
-import { BOWLING_SPARE_TOO_EARLY } from './errors';
+import {
+  BOWLING_SPARE_TOO_EARLY,
+  BOWLING_TOO_MANY_PINS
+} from './errors';
 
 export interface IThrow {
   score: number;
@@ -60,6 +63,10 @@ class Frame implements IFrame {
   private _validateThrow(_throw: Throw): void {
     if (this.throws.length === 0 && _throw.isSpare()) {
       throw new Error(BOWLING_SPARE_TOO_EARLY);
+    }
+
+    if (this.throws.length === 1 && _throw.score + this.throws[0].score === 10) {
+      throw new Error(BOWLING_TOO_MANY_PINS);
     }
   }
 }

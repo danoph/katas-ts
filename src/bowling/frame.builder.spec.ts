@@ -20,22 +20,22 @@ describe('FrameBuilder', () => {
       let throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9, throw10, throw11, throw12, throw13, throw14, throw15, throw16, throw17;
 
       beforeEach(() => {
-        throw1 = new StrikeThrow();
+        throw1 = new StrikeThrow('X');
         throw2 = new NormalThrow('7');
-        throw3 = new SpareThrow();
+        throw3 = new SpareThrow('/');
         throw4 = new NormalThrow('7');
         throw5 = new NormalThrow('2');
         throw6 = new NormalThrow('9');
-        throw7 = new SpareThrow();
-        throw8 = new StrikeThrow();
-        throw9 = new StrikeThrow();
-        throw10 = new StrikeThrow();
+        throw7 = new SpareThrow('/');
+        throw8 = new StrikeThrow('X');
+        throw9 = new StrikeThrow('X');
+        throw10 = new StrikeThrow('X');
         throw11 = new NormalThrow('2');
         throw12 = new NormalThrow('3');
         throw13 = new NormalThrow('6');
-        throw14 = new SpareThrow();
+        throw14 = new SpareThrow('/');
         throw15 = new NormalThrow('7');
-        throw16 = new SpareThrow();
+        throw16 = new SpareThrow('/');
         throw17 = new NormalThrow('3');
 
         throws = [ throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9, throw10, throw11, throw12, throw13, throw14, throw15, throw16, throw17 ]
@@ -86,7 +86,7 @@ describe('FrameBuilder', () => {
         throws = [
           new NormalThrow('1'),
           new NormalThrow('1'),
-          new SpareThrow(),
+          new SpareThrow('/'),
         ]
       });
 
@@ -94,6 +94,29 @@ describe('FrameBuilder', () => {
         expect(() => subject.buildFrames(throws)).toThrowError(Error, "Spare too early - should not allow a spare at the start of a frame");
       });
     });
+
+    describe('throwing a 10 requires spare', () => {
+      beforeEach(() => {
+        throws = [
+          new NormalThrow('3'),
+          new NormalThrow('7'),
+        ]
+      });
+
+      it('throws an exception', () => {
+        expect(() => subject.buildFrames(throws)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
+      });
+    });
+
+    //describe('knocking down 10 pins requires a spare', () => {
+      //beforeEach(() => {
+        //frames = "55" + "-".repeat(18);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
+      //});
+    //});
   });
 
     //describe('not enough strikes', () => {
