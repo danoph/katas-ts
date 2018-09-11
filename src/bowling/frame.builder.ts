@@ -1,22 +1,44 @@
-import {
-  IThrow,
-  GutterballThrow,
-  StrikeThrow,
-  SpareThrow,
-  NormalThrow
-} from './game';
+export interface IThrow {
+  score: number;
+}
 
-interface IFrame {
+export class GutterballThrow implements IThrow {
+  score = 0;
+}
+
+export class StrikeThrow implements IThrow {
+  score = 10;
+}
+
+export class SpareThrow implements IThrow {
+  score = 9;
+}
+
+export class NormalThrow implements IThrow {
+  score: number;
+
+  constructor(throwString: string) {
+    this.score = parseInt(throwString);
+  }
+}
+
+export interface IFrame {
   throws: IThrow[];
 }
 
 class Frame implements IFrame {
-  constructor(public throws: IThrow[]) {}
+  constructor(public throws: IThrow[] = []) {}
+
+  addThrow(_throw: IThrow) {
+    this.throws.push(_throw);
+  }
 }
 
 export class FrameBuilder {
   buildFrames(throws: IThrow[]): IFrame[] {
     let frames: IFrame[] = [];
+
+    let currentFrame = new Frame();
 
     let frameThrows = [];
 

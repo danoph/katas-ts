@@ -1,57 +1,26 @@
-export const BOWLING_GAME_TOO_SHORT = 'BOWLING_GAME_TOO_SHORT';
-export const BOWLING_GAME_TOO_LONG = 'BOWLING_GAME_TOO_LONG';
-export const BOWLING_SPARE_TOO_EARLY = 'BOWLING_SPARE_TOO_EARLY';
-export const BOWLING_STRIKE_TOO_LATE = 'BOWLING_STRIKE_TOO_LATE';
-export const BOWLING_TOO_MANY_PINS = 'BOWLING_TOO_MANY_PINS';
-
-export interface IThrow {
-  score: number;
-}
-
-export class GutterballThrow implements IThrow {
-  score = 0;
-}
-
-export class StrikeThrow implements IThrow {
-  score = 10;
-}
-
-export class SpareThrow implements IThrow {
-  score = 9;
-}
-
-export class NormalThrow implements IThrow {
-  score: number;
-
-  constructor(throwString: string) {
-    this.score = parseInt(throwString);
-  }
-}
-
-class ThrowFactory {
-  static build(throwString) {
-    switch (throwString) {
-      case "-":
-        return new GutterballThrow();
-      case "X":
-        return new StrikeThrow();
-      case "-":
-        return new SpareThrow();
-      default:
-        return new NormalThrow(throwString);
-    }
-  }
-}
+import {
+  IFrame,
+  FrameBuilder,
+  ThrowsFactory
+} from './frame.builder';
+import { FrameScorer } from './frame.scorer';
 
 export class Game {
-  throws: IThrow[];
+  frames: IFrame[];
 
-  constructor(framesString: string) {
-    this.throws = framesString.split("").map(_throw => ThrowFactory.build(_throw));
+  constructor(
+    throwsString: string,
+    throwsFactory = ThrowsFactory,
+    frameBuilder: FrameBuilder = new FrameBuilder(),
+    private frameScorer: FrameScorer = new FrameScorer()
+  ) {
+    const throws = throwsFactory.build(throwsString);
+    this.frames = frameBuilder.buildFrames(throws);
     //throw new Error(BOWLING_GAME_TOO_SHORT);
   }
 
   score() {
-    return this.throws.reduce((score, curThrow) => score + curThrow.score, 0);
+    return this.frameScorer.scoreFrames(this.frames);
+    //return this.throws.reduce((score, curThrow) => score + curThrow.score, 0);
   }
 }

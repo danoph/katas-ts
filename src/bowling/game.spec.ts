@@ -1,11 +1,14 @@
 import {
   Game,
+} from './game';
+
+import {
   BOWLING_GAME_TOO_SHORT,
   BOWLING_GAME_TOO_LONG,
   BOWLING_SPARE_TOO_EARLY,
   BOWLING_STRIKE_TOO_LATE,
   BOWLING_TOO_MANY_PINS,
-} from './game';
+} from './errors';
 
 describe('Game', () => {
   let game;
@@ -161,6 +164,60 @@ describe('Game', () => {
       it('does not throw error', () => {
         expect(() => new Game(frames)).not.toThrow();
       });
+    });
+  });
+});
+
+describe('Game UNIT tests', () => {
+  let game;
+  let throwsString;
+
+  let throwsFactory;
+  let throws;
+
+  let frameBuilder;
+  let frames;
+
+  let frameScorer;
+  let score;
+
+  beforeEach(() => {
+    throws = jasmine.createSpy('throws');
+
+    throwsFactory = {
+      build: jasmine.createSpy('build').and.returnValue(throws)
+    }
+
+    frames = jasmine.createSpy('frames');
+
+    frameBuilder = {
+      buildFrames: jasmine.createSpy('buildFrames').and.returnValue(frames)
+    }
+
+    score = jasmine.createSpy('score');
+
+    frameScorer = {
+      scoreFrames: jasmine.createSpy('scoreFrames').and.returnValue(score)
+    }
+
+    throwsString = jasmine.createSpy('throws string');
+
+    game = new Game(
+      throwsString,
+      throwsFactory,
+      frameBuilder,
+      frameScorer
+    );
+  });
+
+  describe('#score', () => {
+    it('builds up score for frames', () => {
+      expect(throwsFactory.build).toHaveBeenCalledWith(throwsString);
+      expect(frameBuilder.buildFrames).toHaveBeenCalledWith(throws);
+
+      expect(game.score()).toEqual(score);
+
+      expect(frameScorer.scoreFrames).toHaveBeenCalledWith(frames);
     });
   });
 });

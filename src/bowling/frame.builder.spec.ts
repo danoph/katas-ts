@@ -3,7 +3,7 @@ import {
   StrikeThrow,
   SpareThrow,
   NormalThrow
-} from './game';
+} from './frame.builder';
 import { FrameBuilder } from './frame.builder';
 import { ThrowsFactory } from './frame.builder';
 
@@ -11,106 +11,130 @@ describe('FrameBuilder', () => {
   let subject;
   let throws;
 
-  let throw1;
-  let throw2;
-  let throw3;
-  let throw4;
-  let throw5;
-  let throw6;
-  let throw7;
-  let throw8;
-  let throw9;
-  let throw10;
-  let throw11;
-  let throw12;
-  let throw13;
-  let throw14;
-  let throw15;
-  let throw16;
-  let throw17;
-
   describe('#buildFrames', () => {
     beforeEach(() => {
-      throw1 = new StrikeThrow();
-      throw2 = new NormalThrow('7');
-      throw3 = new SpareThrow();
-      throw4 = new NormalThrow('7');
-      throw5 = new NormalThrow('2');
-      throw6 = new NormalThrow('9');
-      throw7 = new SpareThrow();
-      throw8 = new StrikeThrow();
-      throw9 = new StrikeThrow();
-      throw10 = new StrikeThrow();
-      throw11 = new NormalThrow('2');
-      throw12 = new NormalThrow('3');
-      throw13 = new NormalThrow('6');
-      throw14 = new SpareThrow();
-      throw15 = new NormalThrow('7');
-      throw16 = new SpareThrow();
-      throw17 = new NormalThrow('3');
-
-      throws = [
-        throw1,
-        throw2,
-        throw3,
-        throw4,
-        throw5,
-        throw6,
-        throw7,
-        throw8,
-        throw9,
-        throw10,
-        throw11,
-        throw12,
-        throw13,
-        throw14,
-        throw15,
-        throw16,
-        throw17,
-      ]
-
       subject = new FrameBuilder();
     });
 
-    it('returns correct frames', () => {
-      const frames = subject.buildFrames(throws);
+    describe('valid frames', () => {
+      let throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9, throw10, throw11, throw12, throw13, throw14, throw15, throw16, throw17;
 
-      //const throwsString = "X7/729/XXX236/7/3";
+      beforeEach(() => {
+        throw1 = new StrikeThrow();
+        throw2 = new NormalThrow('7');
+        throw3 = new SpareThrow();
+        throw4 = new NormalThrow('7');
+        throw5 = new NormalThrow('2');
+        throw6 = new NormalThrow('9');
+        throw7 = new SpareThrow();
+        throw8 = new StrikeThrow();
+        throw9 = new StrikeThrow();
+        throw10 = new StrikeThrow();
+        throw11 = new NormalThrow('2');
+        throw12 = new NormalThrow('3');
+        throw13 = new NormalThrow('6');
+        throw14 = new SpareThrow();
+        throw15 = new NormalThrow('7');
+        throw16 = new SpareThrow();
+        throw17 = new NormalThrow('3');
 
-      // X
-      expect(frames[0].throws[0]).toEqual(throw1);
-      expect(frames[0].throws.length).toEqual(1);
+        throws = [ throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9, throw10, throw11, throw12, throw13, throw14, throw15, throw16, throw17 ]
+      });
 
-      // 7/
-      expect(frames[1].throws[0]).toEqual(throw2);
-      expect(frames[1].throws[1]).toEqual(throw3);
-      expect(frames[1].throws.length).toEqual(2);
+      it('returns correct frames', () => {
+        const frames = subject.buildFrames(throws);
 
-      // 72
-      expect(frames[2].throws[0]).toEqual(throw4);
-      expect(frames[2].throws[1]).toEqual(throw5);
-      expect(frames[2].throws.length).toEqual(2);
+        //const throwsString = "X7/729/XXX236/7/3";
 
-      // 9/
-      expect(frames[3].throws[0]).toEqual(throw6);
-      expect(frames[3].throws[1]).toEqual(throw7);
-      expect(frames[3].throws.length).toEqual(2);
+        // X
+        expect(frames[0].throws[0]).toEqual(throw1);
+        expect(frames[0].throws.length).toEqual(1);
 
-      // X
-      expect(frames[4].throws[0]).toEqual(throw8);
-      expect(frames[4].throws.length).toEqual(1);
+        // 7/
+        expect(frames[1].throws[0]).toEqual(throw2);
+        expect(frames[1].throws[1]).toEqual(throw3);
+        expect(frames[1].throws.length).toEqual(2);
 
-      // X
-      expect(frames[5].throws[0]).toEqual(throw9);
-      expect(frames[5].throws.length).toEqual(1);
+        // 72
+        expect(frames[2].throws[0]).toEqual(throw4);
+        expect(frames[2].throws[1]).toEqual(throw5);
+        expect(frames[2].throws.length).toEqual(2);
 
-      // X
-      expect(frames[6].throws[0]).toEqual(throw10);
-      expect(frames[6].throws.length).toEqual(1);
+        // 9/
+        expect(frames[3].throws[0]).toEqual(throw6);
+        expect(frames[3].throws[1]).toEqual(throw7);
+        expect(frames[3].throws.length).toEqual(2);
 
-      expect(frames.length).toEqual(10);
+        // X
+        expect(frames[4].throws[0]).toEqual(throw8);
+        expect(frames[4].throws.length).toEqual(1);
+
+        // X
+        expect(frames[5].throws[0]).toEqual(throw9);
+        expect(frames[5].throws.length).toEqual(1);
+
+        // X
+        expect(frames[6].throws[0]).toEqual(throw10);
+        expect(frames[6].throws.length).toEqual(1);
+
+        expect(frames.length).toEqual(10);
+      });
     });
+
+    //describe('spare at beginning of frame', () => {
+      //beforeEach(() => {
+        //throws = [
+          //new NormalThrow('1'),
+          //new NormalThrow('1'),
+          //new SpareThrow(),
+        //]
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => subject.buildFrames(throws)).toThrowError(Error, "Spare too early - should not allow a spare at the start of a frame");
+      //});
+    //});
   });
+
+    //describe('not enough strikes', () => {
+      //beforeEach(() => {
+        //frames = "X".repeat(10);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Game too short - should not accept an invalid game");
+      //});
+    //});
+
+    //describe('too many throws throws an exception', () => {
+      //beforeEach(() => {
+        //frames = "4".repeat(21);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Game too long - should not accept a game that is too long");
+      //});
+    //});
+
+    //describe('knocking down 10 pins requires a spare', () => {
+      //beforeEach(() => {
+        //frames = "55" + "-".repeat(18);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
+      //});
+    //});
+
+    //describe('strikes must be thrown at the start of a frame', () => {
+      //beforeEach(() => {
+        //frames = "-X" + "-".repeat(18);
+      //});
+
+      //it('throws an exception', () => {
+        //expect(() => new Game(frames)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
+      //});
+    //});
 });
 
 describe('ThrowsBuilder', () => {
