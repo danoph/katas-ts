@@ -4,33 +4,41 @@ export const BOWLING_SPARE_TOO_EARLY = 'BOWLING_SPARE_TOO_EARLY';
 export const BOWLING_STRIKE_TOO_LATE = 'BOWLING_STRIKE_TOO_LATE';
 export const BOWLING_TOO_MANY_PINS = 'BOWLING_TOO_MANY_PINS';
 
-interface IThrow {
+export interface IThrow {
   score: number;
 }
 
-class GutterballThrow implements IThrow {
+export class GutterballThrow implements IThrow {
   score = 0;
 }
 
-class StrikeThrow implements IThrow {
+export class StrikeThrow implements IThrow {
   score = 10;
 }
 
-class SpareThrow implements IThrow {
-  score = 10;
+export class SpareThrow implements IThrow {
+  score = 9;
 }
 
-//type Throw = GutterballThrow;
+export class NormalThrow implements IThrow {
+  score: number;
+
+  constructor(throwString: string) {
+    this.score = parseInt(throwString);
+  }
+}
 
 class ThrowFactory {
-  static build(_throw) {
-    switch (_throw) {
+  static build(throwString) {
+    switch (throwString) {
       case "-":
         return new GutterballThrow();
       case "X":
         return new StrikeThrow();
       case "-":
         return new SpareThrow();
+      default:
+        return new NormalThrow(throwString);
     }
   }
 }
