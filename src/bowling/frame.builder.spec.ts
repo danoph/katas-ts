@@ -81,19 +81,19 @@ describe('FrameBuilder', () => {
       });
     });
 
-    //describe('spare at beginning of frame', () => {
-      //beforeEach(() => {
-        //throws = [
-          //new NormalThrow('1'),
-          //new NormalThrow('1'),
-          //new SpareThrow(),
-        //]
-      //});
+    describe('spare at beginning of frame', () => {
+      beforeEach(() => {
+        throws = [
+          new NormalThrow('1'),
+          new NormalThrow('1'),
+          new SpareThrow(),
+        ]
+      });
 
-      //it('throws an exception', () => {
-        //expect(() => subject.buildFrames(throws)).toThrowError(Error, "Spare too early - should not allow a spare at the start of a frame");
-      //});
-    //});
+      it('throws an exception', () => {
+        expect(() => subject.buildFrames(throws)).toThrowError(Error, "Spare too early - should not allow a spare at the start of a frame");
+      });
+    });
   });
 
     //describe('not enough strikes', () => {
