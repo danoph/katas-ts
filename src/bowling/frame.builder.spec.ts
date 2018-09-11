@@ -108,18 +108,18 @@ describe('FrameBuilder', () => {
       });
     });
 
-    //describe('throwing strike on second throw', () => {
-      //beforeEach(() => {
-        //throws = [
-          //new NormalThrow('3'),
-          //new NormalThrow('X'),
-        //]
-      //});
+    describe('throwing strike on second throw', () => {
+      beforeEach(() => {
+        throws = [
+          new NormalThrow('3'),
+          new StrikeThrow('X'),
+        ]
+      });
 
-      //it('throws an exception', () => {
-        //expect(() => subject.buildFrames(throws)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
-      //});
-    //});
+      it('throws an exception', () => {
+        expect(() => subject.buildFrames(throws)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
+      });
+    });
   });
 
     //describe('strikes must be thrown at the start of a frame', () => {
