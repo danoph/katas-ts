@@ -1,4 +1,11 @@
-import { Game, } from './game';
+import {
+  Game,
+  BOWLING_GAME_TOO_SHORT,
+  BOWLING_GAME_TOO_LONG,
+  BOWLING_SPARE_TOO_EARLY,
+  BOWLING_STRIKE_TOO_LATE,
+  BOWLING_TOO_MANY_PINS,
+} from './game';
 
 describe('Game', () => {
   let game;
@@ -76,73 +83,84 @@ describe('Game', () => {
       });
 
       it('throws an exception', () => {
-        expect(() => new Game(frames)).toThrowError(Error, "Spare too early - shoudl not allow a spare at the start of a frame");
+        expect(() => new Game(frames)).toThrowError(Error, "Spare too early - should not allow a spare at the start of a frame");
+      });
+    });
+
+    describe('too many throws throws an exception', () => {
+      beforeEach(() => {
+        frames = "4".repeat(21);
+      });
+
+      it('throws an exception', () => {
+        expect(() => new Game(frames)).toThrowError(Error, "Game too long - should not accept a game that is too long");
+      });
+    });
+
+    describe('knocking down 10 pins requires a spare', () => {
+      beforeEach(() => {
+        frames = "55" + "-".repeat(18);
+      });
+
+      it('throws an exception', () => {
+        expect(() => new Game(frames)).toThrowError(Error, "Too many pins - knocking down 10 pins requires a spare");
+      });
+    });
+
+    describe('strikes must be thrown at the start of a frame', () => {
+      beforeEach(() => {
+        frames = "-X" + "-".repeat(18);
+      });
+
+      it('throws an exception', () => {
+        expect(() => new Game(frames)).toThrowError(Error, "Strike too late - spares must occur at the end of a frame");
+      });
+    });
+
+    describe('tenth frame issues', () => {
+      let badTenthFrames;
+
+      beforeEach(() => {
+        badTenthFrames = {
+          'X4': BOWLING_GAME_TOO_SHORT,
+          '444': BOWLING_GAME_TOO_LONG,
+          '/44': BOWLING_SPARE_TOO_EARLY,
+          'X/4': BOWLING_SPARE_TOO_EARLY,
+          '4//': BOWLING_SPARE_TOO_EARLY,
+          'X4X': BOWLING_STRIKE_TOO_LATE,
+          '4X4': BOWLING_STRIKE_TOO_LATE,
+          '99': BOWLING_TOO_MANY_PINS,
+          'X99': BOWLING_TOO_MANY_PINS
+        }
+      });
+
+      it('throws an exception', () => {
+        for (let frame in badTenthFrames) {
+          frames = "-".repeat(18) + frame;
+          const expectedError = badTenthFrames[frame];
+          expect(() => new Game(frames)).toThrowError(expectedError);
+        }
+      });
+    });
+
+    describe('valid tenth frame issues', () => {
+      let goodTenthFrames;
+
+      beforeEach(() => {
+        goodTenthFrames = [
+          "44",
+          "9/9",
+          "4/X",
+          "X44",
+          "X4/",
+          "XX4",
+          "XXX"
+        ]
+      });
+
+      it('does not throw error', () => {
+        expect(() => new Game(frames)).not.toThrow();
       });
     });
   });
 });
-
-  //def test_not_enough_strikes_throws_an_exception
-    //assert_raise(Bowling::GameTooShort, "Should not accept an invalid game") do
-      //Bowling.new("X" * 10)
-    //end    
-  //end
-
-  //def test_bad_spare_throws_an_exception
-    //assert_raise(Bowling::SpareTooEarly, "Should not allow a spare at the start of a frame") do
-      //Bowling.new("/" + "-" * 19)
-    //end
-  //end
-  
-  //def test_too_many_throws_throws_an_exception
-    //assert_raise(Bowling::GameTooLong, "Should not accept a game that is too long") do
-      //Bowling.new("4" * 21)
-    //end
-  //end
-  
-  //def test_knocking_down_10_pins_requires_a_spare
-    //assert_raise(Bowling::TooManyPins, "Knocking down 10 pins requires a spare") do
-      //Bowling.new("55" + "-" * 18)
-    //end
-  //end
-  
-  //def test_strikes_must_be_thrown_at_the_start_of_a_frame
-    //assert_raise(Bowling::StrikeTooLate, "Spares must occur at the end of a frame") do
-      //Bowling.new("-X" + "-" * 18)
-    //end
-  //end
-
-  //######################
-  //#                    #
-  //# Tenth Frame Issues #
-  //#                    #
-  //######################
-  
-  //BAD_TENTH_FRAMES = {
-    //'X4'  => Bowling::GameTooShort,
-    //'444' => Bowling::GameTooLong,
-    //'/44' => Bowling::SpareTooEarly,
-    //'X/4' => Bowling::SpareTooEarly,
-    //'4//' => Bowling::SpareTooEarly,
-    //'X4X' => Bowling::StrikeTooLate,
-    //'4X4' => Bowling::StrikeTooLate,
-    //'99'  => Bowling::TooManyPins,
-    //'X99' => Bowling::TooManyPins
-  //}
-  
-  //def test_odd_tenth_frame_issues
-    //BAD_TENTH_FRAMES.each do |frame, error|
-      //assert_raise(error) { Bowling.new('-' * 18 + frame) }
-    //end
-  //end
-
-  //GOOD_TENTH_FRAMES = %w( 44 9/9 4/X X44 X4/ XX4 XXX )
-  
-  //def test_valid_tenth_frame_issues
-    //GOOD_TENTH_FRAMES.each do |frame|
-      //assert_nothing_raised { Bowling.new('-' * 18 + frame) }
-    //end
-  //end
-
-//end
-

@@ -1,24 +1,12 @@
-export class BowlingError extends Error {
-  constructor(message) {
-    super(message);
-    Object.setPrototypeOf(this, BowlingError.prototype);
-    this.name = this.constructor.name;
-  }
-
-  dump() {
-    return { message: this.message, stack: this.stack }
-  }
-}
-
-export class BowlingGameTooShort extends BowlingError { }
-export class BowlingGameTooLong extends BowlingError {}
-export class BowlingSpareTooEarly extends BowlingError {}
-export class BowlingStrikeTooLate extends BowlingError {}
-export class BowlingTooManyPins extends BowlingError {}
+export const BOWLING_GAME_TOO_SHORT = 'BOWLING_GAME_TOO_SHORT';
+export const BOWLING_GAME_TOO_LONG = 'BOWLING_GAME_TOO_LONG';
+export const BOWLING_SPARE_TOO_EARLY = 'BOWLING_SPARE_TOO_EARLY';
+export const BOWLING_STRIKE_TOO_LATE = 'BOWLING_STRIKE_TOO_LATE';
+export const BOWLING_TOO_MANY_PINS = 'BOWLING_TOO_MANY_PINS';
 
 export class Game {
   constructor(private frames: string) {
-    throw new Error("Game too short");
+    //throw new Error(BOWLING_GAME_TOO_SHORT);
   }
 
   score() {
