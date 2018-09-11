@@ -10,19 +10,35 @@ interface IFrame {
   throws: IThrow[];
 }
 
-//export class FrameBuilder {
-  //constructor(private throws: IThrow[]) {}
+class Frame implements IFrame {
+  constructor(public throws: IThrow[]) {}
+}
 
-  //buildFrames(): IFrame[] {
-    //let frames: IFrame[] = [];
+export class FrameBuilder {
+  buildFrames(throws: IThrow[]): IFrame[] {
+    let frames: IFrame[] = [];
 
-    //for (let throw of this.throws) {
-      //let frameThrows = [];
+    let frameThrows = [];
 
-      ////if (
-    //}
-  //}
-//}
+    for (let _throw of throws) {
+      switch (_throw.constructor) {
+        case StrikeThrow:
+          frames.push(new Frame([ _throw ]));
+          frameThrows = [];
+          break;
+        default:
+          frameThrows.push(_throw);
+      }
+
+      if (frameThrows.length === 2) {
+        frames.push(new Frame(frameThrows));
+        frameThrows = [];
+      }
+    }
+
+    return frames;
+  }
+}
 
 
 class ThrowFactory {
