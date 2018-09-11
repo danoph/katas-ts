@@ -47,10 +47,13 @@ export class NormalThrow extends Throw {
 
 export interface IFrame {
   throws: IThrow[];
+  score: number;
 }
 
 class Frame implements IFrame {
   throws: IThrow[] = [];
+
+  get score() { return this.throws.reduce((acc, _throw) => acc + _throw.score, 0); }
 
   addThrow(_throw: Throw) {
     this._validateThrow(_throw);
