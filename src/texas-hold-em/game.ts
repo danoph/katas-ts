@@ -17,6 +17,45 @@ class Card {
     if (!VALID_RANKS.includes(this.rank)) throw new Error('Invalid rank');
     if (!VALID_SUITS.includes(this.suit)) throw new Error('Invalid suit');
   }
+
+  get rankValue() {
+    return VALID_RANKS.indexOf(this.rank);
+  }
+}
+
+class HandValidator {
+  constructor(private cards) {
+
+  }
+
+  validate() {
+    this.tooManyCards();
+    this.tooFewCards();
+    this.duplicateCards();
+  }
+
+  tooManyCards() {
+    if (this.cards.length > 7) {
+      throw new Error('Too many cards');
+    }
+  }
+
+  tooFewCards() {
+    if (this.cards.length < 7) {
+      throw new Error('Too few cards');
+    }
+  }
+
+  duplicateCards() {
+    const duplicates = this.cards
+      .filter(card => this.cards
+        .find(card2 => card !== card2 && card2.rank === card.rank && card2.suit === card.suit)
+      )
+
+    if (duplicates.length) {
+      throw new Error('Duplicate cards');
+    }
+  }
 }
 
 export class Game {
@@ -24,10 +63,8 @@ export class Game {
 
   constructor(private cardsString) {
     this.cards = this.cardsString.split(' ').map(cardString => new Card(cardString));
-
-    this.tooManyCards();
-    this.tooFewCards();
-    this.duplicateCards();
+    const validator = new HandValidator(this.cards);
+    validator.validate();
   }
 
   bestHand() {
@@ -53,35 +90,9 @@ export class Game {
   }
 
   getHighRankCard(cards) {
-    return cards.reduce((highRankCard, card) => {
-      if (VALID_RANKS.indexOf(card.rank) > VALID_RANKS.indexOf(highRankCard.rank)) {
-        return card
-      } else {
-        return highRankCard;
-      }
-    }, { rank: -1 } );
-  }
-
-  tooManyCards() {
-    if (this.cards.length > 7) {
-      throw new Error('Too many cards');
-    }
-  }
-
-  tooFewCards() {
-    if (this.cards.length < 7) {
-      throw new Error('Too few cards');
-    }
-  }
-
-  duplicateCards() {
-    const duplicates = this.cards
-      .filter(card => this.cards
-        .find(card2 => card !== card2 && card2.rank === card.rank && card2.suit === card.suit)
-      )
-
-    if (duplicates.length) {
-      throw new Error('Duplicate cards');
-    }
+    return cards.reduce((highCard, card) =>
+      card.rankValue > highCard.rankValue ? card : highCard,
+      { rankValue: -1 }
+    );
   }
 }
