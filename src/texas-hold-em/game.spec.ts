@@ -55,24 +55,28 @@ describe('Texas Hold Em', () => {
         expect(game.bestHand()).toEqual("Four of a Kind (7 high)");
       });
     });
+
+    describe('full house with correct high card', () => {
+      beforeEach(() => {
+        game = new Game("AH AC 2D 2H 2C 5S 8S")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Full House (2 high)");
+      });
+    });
+
+    describe('flush beats straight', () => {
+      beforeEach(() => {
+        game = new Game("2D 4D 6D 7C 8C 9D 10D")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Flush (10 high)");
+      });
+    });
   });
 });
-
-  def test_pick_correct_high_card_for_full_house
-    cards = "AH AC 2D 2H 2C 5S 8S"
-    assert_equal "Full House (2 high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-  #########
-  #       #
-  # Flush #
-  #       #
-  #########
-  
-  def test_flush_beats_straight
-    cards = "2D 4D 6D 7C 8C 9D 10D"
-    assert_equal "Flush (10 high)", TexasHoldEm.new(cards).best_hand
-  end
   
   ############
   #          #
