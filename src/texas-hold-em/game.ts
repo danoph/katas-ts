@@ -34,7 +34,25 @@ export class Game {
         highRankCard = card;
       } 
     }
-    return `High Card (${highRankCard[0]} high)`;
+
+    let rankCounts = {};
+
+    for (let card of cards) {
+      const rank = card[0];
+      const suit = card[1];
+
+      rankCounts[rank] = rankCounts[rank] || 0;
+      rankCounts[rank] += 1;
+    }
+
+    const dupes = Object.keys(rankCounts).filter(rank => rankCounts[rank] > 1);
+
+    if (dupes.length) {
+      return `Two of a Kind (${dupes[0]} high)`;
+    } else {
+      return `High Card (${highRankCard[0]} high)`;
+    }
+    
   }
 
   tooManyCards(cardsString) {
