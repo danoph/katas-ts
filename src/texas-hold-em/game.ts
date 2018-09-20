@@ -10,7 +10,11 @@ export class Game {
   private cards;
 
   constructor(private cardsString) {
-    this.cards = this.cardsString.split(' ');
+    this.cards = this.cardsString.split(' ').map(card => {
+      const suit = card.slice(-1);
+      const rank = card.slice(0, card.length - 1);
+      return [ rank, suit ];
+    });
     this.tooManyCards();
     this.tooFewCards();
     this.duplicateCards();
@@ -18,16 +22,10 @@ export class Game {
   }
 
   bestHand() {
-    const cards = this.cards.map(card => {
-      const suit = card.slice(-1);
-      const rank = card.slice(0, card.length - 1);
-      return [ rank, suit ];
-    });
-    
     let highRankIndex = 0;
     let highRankCard;
 
-    for (let card of cards) {
+    for (let card of this.cards) {
       const rank = card[0];
       const currentRankIndex = VALID_RANKS.indexOf(rank);
 
@@ -39,7 +37,7 @@ export class Game {
 
     let rankCounts = {};
 
-    for (let card of cards) {
+    for (let card of this.cards) {
       const rank = card[0];
       const suit = card[1];
 
@@ -76,13 +74,7 @@ export class Game {
   }
 
   invalidCard() {  
-    const cards = this.cards.map(card => {
-      const suit = card.slice(-1);
-      const rank = card.slice(0, card.length - 1);
-      return [ rank, suit ];
-    });
-    
-    for (let card of cards) {
+    for (let card of this.cards) {
       const rank = card[0];
       const suit = card[1];
 
