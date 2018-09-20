@@ -8,15 +8,10 @@ const VALID_SUITS = [
 
 export class Game {
   constructor(private cardsString) {
-    if (this.tooManyCards(cardsString)) {
-      throw new Error('Too many cards');
-    } else if (this.tooFewCards(cardsString)) {
-      throw new Error('Too few cards');
-    } else if (this.duplicateCards(cardsString)) {
-      throw new Error('Duplicate cards');
-    } else if (this.invalidCard(cardsString)) {
-      throw new Error('Invalid card');
-    }
+    this.tooManyCards(cardsString);
+    this.tooFewCards(cardsString);
+    this.duplicateCards(cardsString);
+    this.invalidCard(cardsString);
   }
 
   bestHand() {
@@ -24,16 +19,22 @@ export class Game {
   }
 
   tooManyCards(cardsString) {
-    if (cardsString.split(' ').length > 7) return true;
+    if (cardsString.split(' ').length > 7) {
+      throw new Error('Too many cards');
+    }
   }
 
   tooFewCards(cardsString) {
-    if (cardsString.split(' ').length < 7) return true;
+    if (cardsString.split(' ').length < 7) {
+      throw new Error('Too few cards');
+    }
   }
 
   duplicateCards(cardsString) {
     const cards = cardsString.split(' ');
-    return new Set(cards).size !== cards.length;
+    if (new Set(cards).size !== cards.length) {
+      throw new Error('Duplicate cards');
+    }
   }
 
   invalidCard(cardsString) {  
@@ -48,13 +49,10 @@ export class Game {
       const rank = card[0];
       const suit = card[1];
 
-      if (!VALID_RANKS.includes(rank) || !VALID_SUITS.includes(suit)) {
-        return true;
-      }
+      if (!VALID_RANKS.includes(rank)) throw new Error('Invalid rank');
+      if (!VALID_SUITS.includes(suit)) throw new Error('Invalid suit');
     }
-    return false;
   }
-
 }
 
 // export class Hand {
