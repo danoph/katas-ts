@@ -7,23 +7,27 @@ const VALID_SUITS = [
 ]
 
 class Card {
-  constructor(public rank, public suit) {}
+  rank: string;
+  suit: string;
+
+  constructor(cardString) {
+    this.suit = cardString.slice(-1);
+    this.rank = cardString.slice(0, cardString.length - 1);
+
+    if (!VALID_RANKS.includes(this.rank)) throw new Error('Invalid rank');
+    if (!VALID_SUITS.includes(this.suit)) throw new Error('Invalid suit');
+  }
 }
 
 export class Game {
   private cards;
 
   constructor(private cardsString) {
-    this.cards = this.cardsString.split(' ').map(card => {
-      const suit = card.slice(-1);
-      const rank = card.slice(0, card.length - 1);
-      return new Card(rank, suit);
-    });
+    this.cards = this.cardsString.split(' ').map(cardString => new Card(cardString));
 
     this.tooManyCards();
     this.tooFewCards();
     this.duplicateCards();
-    this.invalidCard();
   }
 
   bestHand() {
@@ -76,13 +80,6 @@ export class Game {
 
     if (duplicates.length) {
       throw new Error('Duplicate cards');
-    }
-  }
-
-  invalidCard() {  
-    for (let card of this.cards) {
-      if (!VALID_RANKS.includes(card.rank)) throw new Error('Invalid rank');
-      if (!VALID_SUITS.includes(card.suit)) throw new Error('Invalid suit');
     }
   }
 }
