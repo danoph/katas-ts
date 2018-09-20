@@ -31,10 +31,32 @@ export class Game {
   }
 
   bestHand() {
+    let rankCounts = {};
+
+    for (let card of this.cards) {
+      rankCounts[card.rank] = rankCounts[card.rank] || [];
+      rankCounts[card.rank].push(card);
+    }
+
+    const dupes = Object.keys(rankCounts)
+      .filter(rank => rankCounts[rank].length > 1)
+      .reduce((acc, rank) => acc.concat(rankCounts[rank]), [])
+
+    if (dupes.length === 2) {
+      return `Two of a Kind (${this.getHighRankCard(dupes).rank} high)`;
+    } else if (dupes.length === 4) {
+      return `Two Pair (${this.getHighRankCard(dupes).rank} high)`;
+    } else {
+      return `High Card (${this.getHighRankCard(this.cards).rank} high)`;
+    }
+    
+  }
+
+  getHighRankCard(cards) {
     let highRankIndex = 0;
     let highRankCard;
 
-    for (let card of this.cards) {
+    for (let card of cards) {
       const currentRankIndex = VALID_RANKS.indexOf(card.rank);
 
       if (currentRankIndex > highRankIndex) {
@@ -42,22 +64,7 @@ export class Game {
         highRankCard = card;
       } 
     }
-
-    let rankCounts = {};
-
-    for (let card of this.cards) {
-      rankCounts[card.rank] = rankCounts[card.rank] || 0;
-      rankCounts[card.rank] += 1;
-    }
-
-    const dupes = Object.keys(rankCounts).filter(rank => rankCounts[rank] > 1);
-
-    if (dupes.length) {
-      return `Two of a Kind (${dupes[0]} high)`;
-    } else {
-      return `High Card (${highRankCard.rank} high)`;
-    }
-    
+    return highRankCard;
   }
 
   tooManyCards() {
