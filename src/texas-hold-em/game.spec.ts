@@ -75,63 +75,55 @@ describe('Texas Hold Em', () => {
         expect(game.bestHand()).toEqual("Flush (10 high)");
       });
     });
+
+    describe('straight', () => {
+      beforeEach(() => {
+        game = new Game("2C 4D AH 6S 5D 3C 10S")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Straight (6 high)");
+      });
+    });
+
+    describe('three of a kind', () => {
+      beforeEach(() => {
+        game = new Game("4C 7D QH 3S 7H 10H 7S")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Three of a Kind (7 high)");
+      });
+    });
+
+    describe('two pair', () => {
+      beforeEach(() => {
+        game = new Game("4C 7D QH 3S 7H 10H QS")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Two Pair (Q high)");
+      });
+    });
+
+    describe('two of a kind', () => {
+      beforeEach(() => {
+        game = new Game("4C 7D 2H 3S JD 10H 7S")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("Two of a Kind (7 high)");
+      });
+    });
+
+    describe('high card', () => {
+      beforeEach(() => {
+        game = new Game("4C 7D 2H 3S KD 10H 6S")
+      });
+
+      it('outputs correct hand', () => {
+        expect(game.bestHand()).toEqual("High Card (K high)");
+      });
+    });
   });
 });
-  
-  ############
-  #          #
-  # Straight #
-  #          #
-  ############
-  
-  def test_straight
-    cards = "2C 4D AH 6S 5D 3C 10S"
-    assert_equal "Straight (6 high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-  ###################
-  #                 #
-  # Three of a Kind #
-  #                 #
-  ###################
-  
-  def test_pick_three_of_a_kind
-    cards = "4C 7D QH 3S 7H 10H 7S"
-    assert_equal "Three of a Kind (7 high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-  ############
-  #          #
-  # Two Pair #
-  #          #
-  ############
-  
-  def test_pick_two_pair
-    cards = "4C 7D QH 3S 7H 10H QS"
-    assert_equal "Two Pair (Q high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-  #################
-  #               #
-  # Two of a Kind #
-  #               #
-  #################
-  
-  def test_pick_two_of_a_kind
-    cards = "4C 7D 2H 3S JD 10H 7S"
-    assert_equal "Two of a Kind (7 high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-  #############
-  #           #
-  # High Card #
-  #           #
-  #############
-  
-  def test_pick_high_card
-    cards = "4C 7D 2H 3S KD 10H 6S"
-    assert_equal "High Card (K high)", TexasHoldEm.new(cards).best_hand
-  end
-  
-end
-
