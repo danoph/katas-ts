@@ -15,7 +15,26 @@ export class Game {
   }
 
   bestHand() {
-    // implement me
+    const hand = this.cardsString.split(' ');
+    const cards = hand.map(card => {
+      const suit = card.slice(-1);
+      const rank = card.slice(0, card.length - 1);
+      return [ rank, suit ];
+    });
+    
+    let highRankIndex = 0;
+    let highRankCard;
+
+    for (let card of cards) {
+      const rank = card[0];
+      const currentRankIndex = VALID_RANKS.indexOf(rank);
+
+      if (currentRankIndex > highRankIndex) {
+        highRankIndex = currentRankIndex;
+        highRankCard = card;
+      } 
+    }
+    return `High Card (${highRankCard[0]} high)`;
   }
 
   tooManyCards(cardsString) {
@@ -31,8 +50,8 @@ export class Game {
   }
 
   duplicateCards(cardsString) {
-    const cards = cardsString.split(' ');
-    if (new Set(cards).size !== cards.length) {
+    const hand = cardsString.split(' ');
+    if (new Set(hand).size !== hand.length) {
       throw new Error('Duplicate cards');
     }
   }
