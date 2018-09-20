@@ -53,18 +53,18 @@ export class Game {
   }
 
   getHighRankCard(cards) {
-    let highRankIndex = 0;
-    let highRankCard;
-
-    for (let card of cards) {
+    return cards.reduce((acc, card) => {
       const currentRankIndex = VALID_RANKS.indexOf(card.rank);
 
-      if (currentRankIndex > highRankIndex) {
-        highRankIndex = currentRankIndex;
-        highRankCard = card;
-      } 
-    }
-    return highRankCard;
+      if (currentRankIndex > acc.highRankIndex) {
+        return {
+          highRankIndex: currentRankIndex,
+          highRankCard: card
+        }
+      } else {
+        return acc;
+      }
+    }, {highRankIndex: 0, highRankCard: null}).highRankCard;
   }
 
   tooManyCards() {
