@@ -7,16 +7,18 @@ const VALID_SUITS = [
 ]
 
 export class Game {
+  private cards;
+
   constructor(private cardsString) {
-    this.tooManyCards(cardsString);
-    this.tooFewCards(cardsString);
-    this.duplicateCards(cardsString);
-    this.invalidCard(cardsString);
+    this.cards = this.cardsString.split(' ');
+    this.tooManyCards();
+    this.tooFewCards();
+    this.duplicateCards();
+    this.invalidCard();
   }
 
   bestHand() {
-    const hand = this.cardsString.split(' ');
-    const cards = hand.map(card => {
+    const cards = this.cards.map(card => {
       const suit = card.slice(-1);
       const rank = card.slice(0, card.length - 1);
       return [ rank, suit ];
@@ -55,28 +57,26 @@ export class Game {
     
   }
 
-  tooManyCards(cardsString) {
-    if (cardsString.split(' ').length > 7) {
+  tooManyCards() {
+    if (this.cards.length > 7) {
       throw new Error('Too many cards');
     }
   }
 
-  tooFewCards(cardsString) {
-    if (cardsString.split(' ').length < 7) {
+  tooFewCards() {
+    if (this.cards.length < 7) {
       throw new Error('Too few cards');
     }
   }
 
-  duplicateCards(cardsString) {
-    const hand = cardsString.split(' ');
-    if (new Set(hand).size !== hand.length) {
+  duplicateCards() {
+    if (new Set(this.cards).size !== this.cards.length) {
       throw new Error('Duplicate cards');
     }
   }
 
-  invalidCard(cardsString) {  
-    const hand = cardsString.split(' ');
-    const cards = hand.map(card => {
+  invalidCard() {  
+    const cards = this.cards.map(card => {
       const suit = card.slice(-1);
       const rank = card.slice(0, card.length - 1);
       return [ rank, suit ];
@@ -91,13 +91,3 @@ export class Game {
     }
   }
 }
-
-// export class Hand {
-//   constructor(private cards) {
-
-//   }
-
-//   newHand() {
-
-//   }
-// }
