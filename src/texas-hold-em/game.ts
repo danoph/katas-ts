@@ -7,9 +7,7 @@ const VALID_SUITS = [
 ]
 
 class Card {
-  constructor(public rank, public suit) {
-  
-  }
+  constructor(public rank, public suit) {}
 }
 
 export class Game {
@@ -71,7 +69,12 @@ export class Game {
   }
 
   duplicateCards() {
-    if (new Set(this.cards).size !== this.cards.length) {
+    const duplicates = this.cards
+      .filter(card => this.cards
+        .find(card2 => card !== card2 && card2.rank === card.rank && card2.suit === card.suit)
+      )
+
+    if (duplicates.length) {
       throw new Error('Duplicate cards');
     }
   }
