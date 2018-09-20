@@ -1,25 +1,25 @@
 import { Game } from './game';
 
-describe('Texas Hold Em', () => {
-  describe('invalid cards', () => {
+fdescribe('Texas Hold Em', () => {
+  fdescribe('invalid cards', () => {
     it('does not accept bad card - 1H', () => {
-      expect(() => new Game("2C 3C 4C 5C 6C 7C 1H")).toRaise(Error, "Invalid card");
+      expect(() => new Game("2C 3C 4C 5C 6C 7C 1H")).toThrowError(Error, "Invalid card");
     });
 
     it('does not accept bad card - 2J', () => {
-      expect(() => new Game("2C 3C 4C 5C 6C 7C 2J")).toRaise(Error, "Invalid card");
+      expect(() => new Game("2C 3C 4C 5C 6C 7C 2J")).toThrowError(Error, "Invalid card");
     });
 
     it('does not accept more than 7 cards', () => {
-      expect(() => new Game("KD 9H 10D AD JD 6S QD 6D")).toRaise(Error, "Too many cards");
+      expect(() => new Game("KD 9H 10D AD JD 6S QD 6D")).toThrowError(Error, "Too many cards");
     });
 
     it('does not accept less than 7 cards', () => {
-      expect(() => new Game("KD 9H 10D AD JD 6S")).toRaise(Error, "Too few cards");
+      expect(() => new Game("KD 9H 10D AD JD 6S")).toThrowError(Error, "Too few cards");
     });
 
     it('does not accept duplicated cards', () => {
-      expect(() => new Game("KD 9H 10D AD JD 6S 9H")).toRaise(Error, "Duplicate cards");
+      expect(() => new Game("KD 9H 10D AD JD 6S 9H")).toThrowError(Error, "Duplicate cards");
     });
   });
 
