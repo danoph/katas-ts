@@ -96,7 +96,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('two pair', () => {
+    describe('two pair', () => {
       beforeEach(() => {
         game = new Game("4C 7D QH 3S 7H 10H QS")
       });
@@ -106,7 +106,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('two of a kind', () => {
+    describe('two of a kind', () => {
       beforeEach(() => {
         game = new Game("4C 7D 2H 3S JD 10H 7S")
       });
