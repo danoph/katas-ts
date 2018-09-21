@@ -13,6 +13,6 @@ export class Game {
 
   bestHand() {
     const evaluator = new HandEvaluator(this.cards);
-    return evaluator.evaluate();
+    return evaluator.evaluateHand();
   }
 }
