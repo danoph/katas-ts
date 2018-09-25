@@ -5,7 +5,7 @@ export class Hand {
         
     }
 
-    getDuplicates() {
+    getRankDuplicates() {
         let rankCounts = {};
 
         for (let card of this.cards) {
@@ -16,6 +16,19 @@ export class Hand {
         return Object.keys(rankCounts)
         .filter(rank => rankCounts[rank].length > 1)
         .map(rank => rankCounts[rank]);
+    }
+
+    getSuitDuplicates() {
+        let suitCounts = {};
+
+        for (let card of this.cards) {
+            suitCounts[card.suit] = suitCounts[card.suit] || [];
+            suitCounts[card.suit].push(card);
+        }
+
+        return Object.keys(suitCounts)
+        .filter(suit => suitCounts[suit].length > 1)
+        .map(suit => suitCounts[suit]);
     }
 
     getHighRankCard(cards) {
@@ -41,7 +54,7 @@ export class TwoOfAKind extends Hand {
     weight = 8;
 
     evaluate() {
-        const dupes = this.getDuplicates();
+        const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 2) {
             return {
                 weight: 8,
@@ -55,7 +68,7 @@ export class TwoPair extends Hand {
     weight = 7;
 
     evaluate() {
-        const dupes = this.getDuplicates();
+        const dupes = this.getRankDuplicates();
         if (dupes.length === 2 && dupes[0].length === 2 && dupes[1].length === 2) {
             return {
                 weight: 7,
@@ -69,7 +82,7 @@ export class ThreeOfAKind extends Hand {
     weight = 6;
 
     evaluate() {
-        const dupes = this.getDuplicates();
+        const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 3) {
             return {
                 weight: 6,
@@ -83,7 +96,7 @@ export class FourOfAKind extends Hand {
     weight = 2;
 
     evaluate() {
-        const dupes = this.getDuplicates();
+        const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 4) {
             return {
                 weight: 2,
@@ -97,7 +110,7 @@ export class FullHouse extends Hand {
     weight = 3;
 
     evaluate() {
-        const dupes = this.getDuplicates().sort((a, b) => b.length - a.length);
+        const dupes = this.getRankDuplicates().sort((a, b) => b.length - a.length);
         if (dupes.length === 2 && dupes[0].length === 3 && dupes.length === 2) {
             return {
                 weight: 3,
@@ -111,19 +124,10 @@ export class Straight extends Hand {
     weight = 5;
 
     sortCards(cards) {
-        return cards.sort((a,b) => {
-            return a.rankValue - b.rankValue;
-        });
-        
-
-
+        return cards.sort((a,b) => a.rankValue - b.rankValue);
     }
 
-
-
     evaluate() {
-        //console.log(this.sortCards(this.cards));
-
         const sortedCards = this.sortCards(this.cards);
 
         let straightCards = [sortedCards[0]];
@@ -149,5 +153,20 @@ export class Straight extends Hand {
             }
         }
         
+    }
+}
+
+export class Flush extends Hand {
+    weight = 4;
+
+    evaluate() {
+        const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
+
+        if (suits[0].length >= 5) {
+            return {
+                weight: 4,
+                message: `Flush (${this.getHighRankCard(suits[0])} high)`
+            }
+        }
     }
 }
