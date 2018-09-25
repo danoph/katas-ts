@@ -16,4 +16,3 @@ export class Card {
         return VALID_RANKS.indexOf(this.rank);
     }
 }
-  

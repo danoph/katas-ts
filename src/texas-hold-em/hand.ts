@@ -106,4 +106,48 @@ export class FullHouse extends Hand {
         }
     }
 }
-  
+
+export class Straight extends Hand {
+    weight = 5;
+
+    sortCards(cards) {
+        return cards.sort((a,b) => {
+            return a.rankValue - b.rankValue;
+        });
+        
+
+
+    }
+
+
+
+    evaluate() {
+        //console.log(this.sortCards(this.cards));
+
+        const sortedCards = this.sortCards(this.cards);
+
+        let straightCards = [sortedCards[0]];
+
+        for (let cardIndex in sortedCards) {
+            const index = parseInt(cardIndex);
+            const card = sortedCards[index];
+
+            if (sortedCards[index-1]) {
+                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
+                    straightCards.push(card);
+                    if (straightCards.length === 5) break;        
+                } else {
+                    straightCards = [ card ];
+                }
+            }
+        }
+
+        if (straightCards.length === 5) {
+            return {
+                weight: 5,
+                message: `Straight (${this.getHighRankCard(straightCards)} high)`
+            }
+        }
+        
+    }
+}
