@@ -1,5 +1,6 @@
 export class Hand {
     weight: number;
+    handName: string;
 
     constructor(public cards) {}
 
@@ -57,22 +58,24 @@ export class Hand {
 
         return straightCards;
     }
+
+    get message() {
+        return `${this.handName} (${this.getHighRankCard()} high)`
+     }
 }
 
 export class HighCard extends Hand {
     weight = 9;
+    handName = 'High Card';
 
     evaluate() {
         return new HighCard(this.cards);
-    }
-
-    get message() {
-       return `High Card (${this.getHighRankCard()} high)`
     }
 }
 
 export class TwoOfAKind extends Hand {
     weight = 8;
+    handName = 'Two of a Kind';
 
     evaluate() {
         const dupes = this.getRankDuplicates();
@@ -80,14 +83,11 @@ export class TwoOfAKind extends Hand {
             return new TwoOfAKind(dupes[0]);
         }
     }
-
-    get message() {
-        return `Two of a Kind (${this.getHighRankCard()} high)`;
-    }
 }
 
 export class TwoPair extends Hand {
     weight = 7;
+    handName = 'Two Pair';
 
     evaluate() {
         const dupes = this.getRankDuplicates();
@@ -95,14 +95,11 @@ export class TwoPair extends Hand {
             return new TwoPair([...dupes[0], ...dupes[1]]);
         }
     }
-
-    get message() {
-        return `Two Pair (${this.getHighRankCard()} high)`;
-    }
 }
 
 export class ThreeOfAKind extends Hand {
     weight = 6;
+    handName = 'Three of a Kind';
 
     evaluate() {
         const dupes = this.getRankDuplicates();
@@ -110,14 +107,11 @@ export class ThreeOfAKind extends Hand {
             return new ThreeOfAKind(dupes[0])
         }
     }
-
-    get message() {
-        return `Three of a Kind (${this.getHighRankCard()} high)`
-    }
 }
 
 export class FourOfAKind extends Hand {
     weight = 2;
+    handName = 'Four of a Kind';
 
     evaluate() {
         const dupes = this.getRankDuplicates();
@@ -125,14 +119,11 @@ export class FourOfAKind extends Hand {
             return new FourOfAKind(dupes[0])
         }
     }
-
-    get message() {
-        return `Four of a Kind (${this.getHighRankCard()} high)`
-    }
 }
 
 export class FullHouse extends Hand {
     weight = 3;
+    handName = 'Full House';
 
     evaluate() {
         const dupes = this.getRankDuplicates().sort((a, b) => b.length - a.length);
@@ -140,14 +131,11 @@ export class FullHouse extends Hand {
             return new FullHouse(dupes[0])
         }
     }
-
-    get message() {
-        return `Full House (${this.getHighRankCard()} high)`
-    }
 }
 
 export class Straight extends Hand {
     weight = 5;
+    handName = 'Straight';
 
     evaluate() {
         const straightCards = this.getStraightCards();
@@ -155,14 +143,11 @@ export class Straight extends Hand {
             return new Straight(straightCards);
         }
     }
-
-    get message() {
-        return `Straight (${this.getHighRankCard()} high)`;
-    }
 }
 
 export class Flush extends Hand {
     weight = 4;
+    handName = 'Flush';
 
     evaluate() {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
@@ -171,14 +156,11 @@ export class Flush extends Hand {
             return new Flush(suits[0]);
         }
     }
-
-    get message() {
-        return `Flush (${this.getHighRankCard()} high)`;
-    }
 }
 
 export class StraightFlush extends Hand {
     weight = 1;
+    handName = 'Straight Flush';
 
     evaluate() {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
@@ -190,16 +172,12 @@ export class StraightFlush extends Hand {
         if (straightCards.length === 5 && straightSuit.length === 5) {
             return new StraightFlush(suits[0]);
         }
-
-    }
-
-    get message() {
-        return `Straight Flush (${this.getHighRankCard()} high)`;
     }
 }
 
 export class RoyalFlush extends Hand {
     weight = 0;
+    handName = 'Royal Flush';
 
     evaluate() {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
@@ -211,9 +189,5 @@ export class RoyalFlush extends Hand {
         if (straightCards.length >= 5 && straightSuit.length === 5 && straightCards[straightCards.length - 1].rank === 'A') {
             return new RoyalFlush(suits[0]);
         }
-    }
-
-    get message() {
-        return `Royal Flush (${this.getHighRankCard()} high)`;
     }
 }
