@@ -1,3 +1,5 @@
+import { VALID_RANKS } from './constants';
+
 export class HandEvaluator {
     public dupes;
 
@@ -6,12 +8,13 @@ export class HandEvaluator {
     }
 
     public evaluateHand() {
-        
+        this.evaluateOrder();
         if (this.dupes.length) {
             const hands = [
                 new TwoOfAKind(this.cards).evaluate(),
                 new TwoPair(this.cards).evaluate(),
-                new ThreeOfAKind(this.cards).evaluate()
+                new ThreeOfAKind(this.cards).evaluate(),
+                new FourOfAKind(this.cards).evaluate()
             ].filter(hand => hand);
             return this.getBestHand(hands);
         } else {
@@ -20,8 +23,9 @@ export class HandEvaluator {
     }
 
     getBestHand(hands) {
+        console.log('HANDS: ' , hands);
         return hands.reduce((bestHand, hand) => {
-            hand.weight > bestHand.weight ? hand : bestHand
+          return hand.weight < bestHand.weight ? hand : bestHand
         }).message;
     }
     
@@ -42,7 +46,20 @@ export class HandEvaluator {
 
         return Object.keys(rankCounts)
         .filter(rank => rankCounts[rank].length > 1)
-        .reduce((acc, rank) => acc.concat(rankCounts[rank]), [])
+        .map(rank => rankCounts[rank])
+        // .reduce((acc, rank) => rankCounts[rank], [])
+        //.reduce((acc, rank) => acc.concat(rankCounts[rank]), [])
+    }
+
+    evaluateOrder() {
+        //numArray.sort((a, b) => a - b)
+
+        //console.log('CARD MAP BY RANK: ',this.cards.map(card => VALID_RANKS.indexOf(card.rank)))
+
+        const sortedCards = this.cards.map(card => VALID_RANKS.indexOf(card.rank))
+        .sort((a, b) => a - b);
+
+        console.log(sortedCards);
     }
 }
 
@@ -52,7 +69,7 @@ class HighCard extends HandEvaluator {
 
     evaluate() {
         return {
-            weight: 1,
+            weight: 9,
             message: `High Card (${this.getHighRankCard(this.cards)} high)`
         }
     }
@@ -63,10 +80,10 @@ class TwoOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 2) {
+        if (this.dupes.length === 1 && this.dupes[0].length === 2) {
             return {
-                weight: 2,
-                message: `Two of a Kind (${this.getHighRankCard(this.dupes)} high)`
+                weight: 8,
+                message: `Two of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
             }
         }
     }
@@ -77,10 +94,10 @@ class TwoPair extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 4) {
+        if (this.dupes.length === 2 && this.dupes[0].length === 2 && this.dupes[1].length === 2) {
             return {
-                weight: 3,
-                message: `Two Pair (${this.getHighRankCard(this.dupes)} high)`
+                weight: 7,
+                message: `Two Pair (${this.getHighRankCard([...this.dupes[0], ...this.dupes[1]])} high)`
             }
         }
     }
@@ -91,10 +108,25 @@ class ThreeOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 6) {
+        console.log('this.dupes: ' , this.dupes);
+        if (this.dupes.length === 1 && this.dupes[0].length === 3) {
             return {
-                weight: 4,
-                message: `Three of a Kind (${this.getHighRankCard(this.dupes)} high)`
+                weight: 6,
+                message: `Three of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
+            }
+        }
+    }
+}
+
+class FourOfAKind extends HandEvaluator {
+    rank: string;
+    weight: number;
+
+    evaluate() {
+        if (this.dupes.length === 1 && this.dupes[0].length === 4) {
+            return {
+                weight: 2,
+                message: `Four of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
             }
         }
     }
