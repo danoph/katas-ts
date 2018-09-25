@@ -138,9 +138,9 @@ export class Straight extends Hand {
 
             if (sortedCards[index-1]) {
                 if (card.rankValue === sortedCards[index-1].rankValue + 1) {
-                    straightCards.push(card);
-                    if (straightCards.length === 5) break;        
+                    straightCards.push(card);                            
                 } else {
+                    if (straightCards.length >= 5) break;
                     straightCards = [ card ];
                 }
             }
@@ -190,9 +190,9 @@ export class StraightFlush extends Hand {
 
             if (sortedCards[index-1]) {
                 if (card.rankValue === sortedCards[index-1].rankValue + 1) {
-                    straightCards.push(card);
-                    if (straightCards.length === 5) break;        
+                    straightCards.push(card);        
                 } else {
+                    if (straightCards.length >= 5) break;
                     straightCards = [ card ];
                 }
             }
