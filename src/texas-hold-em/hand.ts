@@ -37,6 +37,28 @@ export class Hand {
         { rankValue: -1 }
         ).rank;
     }
+
+    getStraightCards() {
+        const sortedCards = this.cards.sort((a,b) => a.rankValue - b.rankValue);
+
+        let straightCards = [sortedCards[0]];
+
+        for (let cardIndex in sortedCards) {
+            const index = parseInt(cardIndex);
+            const card = sortedCards[index];
+
+            if (sortedCards[index-1]) {
+                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
+                    straightCards.push(card);                            
+                } else {
+                    if (straightCards.length >= 5) break;
+                    straightCards = [ card ];
+                }
+            }
+        }
+
+        return straightCards;
+    }
 }
 
 export class HighCard extends Hand {
@@ -123,29 +145,8 @@ export class FullHouse extends Hand {
 export class Straight extends Hand {
     weight = 5;
 
-    sortCards(cards) {
-        return cards.sort((a,b) => a.rankValue - b.rankValue);
-    }
-
     evaluate() {
-        const sortedCards = this.sortCards(this.cards);
-
-        let straightCards = [sortedCards[0]];
-
-        for (let cardIndex in sortedCards) {
-            const index = parseInt(cardIndex);
-            const card = sortedCards[index];
-
-            if (sortedCards[index-1]) {
-                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
-                    straightCards.push(card);                            
-                } else {
-                    if (straightCards.length >= 5) break;
-                    straightCards = [ card ];
-                }
-            }
-        }
-
+        const straightCards = this.getStraightCards();
         if (straightCards.length === 5) {
             return {
                 weight: 5,
@@ -174,29 +175,9 @@ export class Flush extends Hand {
 export class StraightFlush extends Hand {
     weight = 1;
 
-    sortCards(cards) {
-        return cards.sort((a,b) => a.rankValue - b.rankValue);
-    }
-
     evaluate() {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
-        const sortedCards = this.sortCards(this.cards);
-
-        let straightCards = [sortedCards[0]];
-
-        for (let cardIndex in sortedCards) {
-            const index = parseInt(cardIndex);
-            const card = sortedCards[index];
-
-            if (sortedCards[index-1]) {
-                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
-                    straightCards.push(card);        
-                } else {
-                    if (straightCards.length >= 5) break;
-                    straightCards = [ card ];
-                }
-            }
-        }
+        const straightCards = this.getStraightCards();
         
         const commonSuit = suits[0][0].suit;
         const straightSuit = straightCards.filter(card => card.suit === commonSuit);
@@ -214,29 +195,9 @@ export class StraightFlush extends Hand {
 export class RoyalFlush extends Hand {
     weight = 0;
 
-    sortCards(cards) {
-        return cards.sort((a,b) => a.rankValue - b.rankValue);
-    }
-
     evaluate() {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
-        const sortedCards = this.sortCards(this.cards);
-
-        let straightCards = [sortedCards[0]];
-
-        for (let cardIndex in sortedCards) {
-            const index = parseInt(cardIndex);
-            const card = sortedCards[index];
-
-            if (sortedCards[index-1]) {
-                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
-                    straightCards.push(card);
-                } else {
-                    if (straightCards.length >= 5) break;
-                    straightCards = [ card ];
-                }
-            }
-        }
+        const straightCards = this.getStraightCards();
         
         const commonSuit = suits[0][0].suit;
         const straightSuit = straightCards.filter(card => card.suit === commonSuit);
