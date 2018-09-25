@@ -38,7 +38,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    describe('straight flush', () => {
+    fdescribe('straight flush', () => {
       beforeEach(() => {
         game = new Game("KD 9H 10D 9D JD 6S QD")
       });

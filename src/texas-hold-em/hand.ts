@@ -170,3 +170,42 @@ export class Flush extends Hand {
         }
     }
 }
+
+export class StraightFlush extends Hand {
+    weight = 1;
+
+    sortCards(cards) {
+        return cards.sort((a,b) => a.rankValue - b.rankValue);
+    }
+
+    evaluate() {
+        const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
+        const sortedCards = this.sortCards(this.cards);
+
+        let straightCards = [sortedCards[0]];
+
+        for (let cardIndex in sortedCards) {
+            const index = parseInt(cardIndex);
+            const card = sortedCards[index];
+
+            if (sortedCards[index-1]) {
+                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
+                    straightCards.push(card);
+                    if (straightCards.length === 5) break;        
+                } else {
+                    straightCards = [ card ];
+                }
+            }
+        }
+        
+        const commonSuit = suits[0][0].suit;
+        const straightSuit = straightCards.filter(card => card.suit === commonSuit);
+        if (straightCards.length === 5 && straightSuit.length === 5) {
+            return {
+                weight: 1,
+                message: `Straight Flush (${this.getHighRankCard(suits[0])} high)`
+            }
+        }
+
+    }
+}
