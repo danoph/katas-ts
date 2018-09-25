@@ -56,7 +56,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    describe('full house with correct high card', () => {
+    fdescribe('full house with correct high card', () => {
       beforeEach(() => {
         game = new Game("AH AC 2D 2H 2C 5S 8S")
       });

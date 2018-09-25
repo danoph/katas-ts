@@ -8,13 +8,13 @@ export class HandEvaluator {
     }
 
     public evaluateHand() {
-        this.evaluateOrder();
         if (this.dupes.length) {
             const hands = [
                 new TwoOfAKind(this.cards).evaluate(),
                 new TwoPair(this.cards).evaluate(),
                 new ThreeOfAKind(this.cards).evaluate(),
-                new FourOfAKind(this.cards).evaluate()
+                new FourOfAKind(this.cards).evaluate(),
+                new FullHouse(this.cards).evaluate()
             ].filter(hand => hand);
             return this.getBestHand(hands);
         } else {
@@ -23,7 +23,6 @@ export class HandEvaluator {
     }
 
     getBestHand(hands) {
-        console.log('HANDS: ' , hands);
         return hands.reduce((bestHand, hand) => {
           return hand.weight < bestHand.weight ? hand : bestHand
         }).message;
@@ -49,17 +48,6 @@ export class HandEvaluator {
         .map(rank => rankCounts[rank])
         // .reduce((acc, rank) => rankCounts[rank], [])
         //.reduce((acc, rank) => acc.concat(rankCounts[rank]), [])
-    }
-
-    evaluateOrder() {
-        //numArray.sort((a, b) => a - b)
-
-        //console.log('CARD MAP BY RANK: ',this.cards.map(card => VALID_RANKS.indexOf(card.rank)))
-
-        const sortedCards = this.cards.map(card => VALID_RANKS.indexOf(card.rank))
-        .sort((a, b) => a - b);
-
-        console.log(sortedCards);
     }
 }
 
@@ -108,7 +96,6 @@ class ThreeOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        console.log('this.dupes: ' , this.dupes);
         if (this.dupes.length === 1 && this.dupes[0].length === 3) {
             return {
                 weight: 6,
@@ -127,6 +114,22 @@ class FourOfAKind extends HandEvaluator {
             return {
                 weight: 2,
                 message: `Four of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
+            }
+        }
+    }
+}
+
+class FullHouse extends HandEvaluator {
+    rank: string;
+    weight: number;
+
+    evaluate() {
+        const dupes = this.dupes.sort((a, b) => b.length - a.length);
+        
+        if (dupes.length === 2 && dupes[0].length === 3 && dupes.length === 2) {
+            return {
+                weight: 3,
+                message: `Full House (${this.getHighRankCard(dupes[0])} high)`
             }
         }
     }
