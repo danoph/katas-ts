@@ -1,25 +1,18 @@
 import { VALID_RANKS } from './constants';
 
 export class HandEvaluator {
-    public dupes;
-
-    constructor(public cards) {
-        this.dupes = this.getDuplicates();
-    }
+    constructor(public cards) {}
 
     public evaluateHand() {
-        if (this.dupes.length) {
-            const hands = [
-                new TwoOfAKind(this.cards).evaluate(),
-                new TwoPair(this.cards).evaluate(),
-                new ThreeOfAKind(this.cards).evaluate(),
-                new FourOfAKind(this.cards).evaluate(),
-                new FullHouse(this.cards).evaluate()
-            ].filter(hand => hand);
-            return this.getBestHand(hands);
-        } else {
-            return new HighCard(this.cards).evaluate().message;
-        }
+        const hands = [
+            new HighCard(this.cards).evaluate(),
+            new TwoOfAKind(this.cards).evaluate(),
+            new TwoPair(this.cards).evaluate(),
+            new ThreeOfAKind(this.cards).evaluate(),
+            new FourOfAKind(this.cards).evaluate(),
+            new FullHouse(this.cards).evaluate()
+        ].filter(hand => hand);
+        return this.getBestHand(hands);
     }
 
     getBestHand(hands) {
@@ -45,9 +38,7 @@ export class HandEvaluator {
 
         return Object.keys(rankCounts)
         .filter(rank => rankCounts[rank].length > 1)
-        .map(rank => rankCounts[rank])
-        // .reduce((acc, rank) => rankCounts[rank], [])
-        //.reduce((acc, rank) => acc.concat(rankCounts[rank]), [])
+        .map(rank => rankCounts[rank]);
     }
 }
 
@@ -68,10 +59,11 @@ class TwoOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 1 && this.dupes[0].length === 2) {
+        const dupes = this.getDuplicates();
+        if (dupes.length === 1 && dupes[0].length === 2) {
             return {
                 weight: 8,
-                message: `Two of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
+                message: `Two of a Kind (${this.getHighRankCard(dupes[0])} high)`
             }
         }
     }
@@ -82,10 +74,11 @@ class TwoPair extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 2 && this.dupes[0].length === 2 && this.dupes[1].length === 2) {
+        const dupes = this.getDuplicates();
+        if (dupes.length === 2 && dupes[0].length === 2 && dupes[1].length === 2) {
             return {
                 weight: 7,
-                message: `Two Pair (${this.getHighRankCard([...this.dupes[0], ...this.dupes[1]])} high)`
+                message: `Two Pair (${this.getHighRankCard([...dupes[0], ...dupes[1]])} high)`
             }
         }
     }
@@ -96,10 +89,11 @@ class ThreeOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 1 && this.dupes[0].length === 3) {
+        const dupes = this.getDuplicates();
+        if (dupes.length === 1 && dupes[0].length === 3) {
             return {
                 weight: 6,
-                message: `Three of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
+                message: `Three of a Kind (${this.getHighRankCard(dupes[0])} high)`
             }
         }
     }
@@ -110,10 +104,11 @@ class FourOfAKind extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        if (this.dupes.length === 1 && this.dupes[0].length === 4) {
+        const dupes = this.getDuplicates();
+        if (dupes.length === 1 && dupes[0].length === 4) {
             return {
                 weight: 2,
-                message: `Four of a Kind (${this.getHighRankCard(this.dupes[0])} high)`
+                message: `Four of a Kind (${this.getHighRankCard(dupes[0])} high)`
             }
         }
     }
@@ -124,8 +119,7 @@ class FullHouse extends HandEvaluator {
     weight: number;
 
     evaluate() {
-        const dupes = this.dupes.sort((a, b) => b.length - a.length);
-        
+        const dupes = this.getDuplicates().sort((a, b) => b.length - a.length);
         if (dupes.length === 2 && dupes[0].length === 3 && dupes.length === 2) {
             return {
                 weight: 3,
