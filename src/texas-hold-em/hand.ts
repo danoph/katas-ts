@@ -1,9 +1,7 @@
 export class Hand {
     weight: number;
 
-    constructor(public cards) {
-        
-    }
+    constructor(public cards) {}
 
     getRankDuplicates() {
         let rankCounts = {};
@@ -31,8 +29,8 @@ export class Hand {
         .map(suit => suitCounts[suit]);
     }
 
-    getHighRankCard(cards) {
-        return cards.reduce((highCard, card) =>
+    getHighRankCard() {
+        return this.cards.reduce((highCard, card) =>
         card.rankValue > highCard.rankValue ? card : highCard,
         { rankValue: -1 }
         ).rank;
@@ -69,7 +67,7 @@ export class HighCard extends Hand {
     }
 
     get message() {
-       return `High Card (${this.getHighRankCard(this.cards)} high)`
+       return `High Card (${this.getHighRankCard()} high)`
     }
 }
 
@@ -84,7 +82,7 @@ export class TwoOfAKind extends Hand {
     }
 
     get message() {
-        return `Two of a Kind (${this.getHighRankCard(this.cards)} high)`;
+        return `Two of a Kind (${this.getHighRankCard()} high)`;
     }
 }
 
@@ -99,7 +97,7 @@ export class TwoPair extends Hand {
     }
 
     get message() {
-        return `Two Pair (${this.getHighRankCard(this.cards)} high)`;
+        return `Two Pair (${this.getHighRankCard()} high)`;
     }
 }
 
@@ -114,7 +112,7 @@ export class ThreeOfAKind extends Hand {
     }
 
     get message() {
-        return `Three of a Kind (${this.getHighRankCard(this.cards)} high)`
+        return `Three of a Kind (${this.getHighRankCard()} high)`
     }
 }
 
@@ -129,7 +127,7 @@ export class FourOfAKind extends Hand {
     }
 
     get message() {
-        return `Four of a Kind (${this.getHighRankCard(this.cards)} high)`
+        return `Four of a Kind (${this.getHighRankCard()} high)`
     }
 }
 
@@ -144,7 +142,7 @@ export class FullHouse extends Hand {
     }
 
     get message() {
-        return `Full House (${this.getHighRankCard(this.cards)} high)`
+        return `Full House (${this.getHighRankCard()} high)`
     }
 }
 
@@ -159,7 +157,7 @@ export class Straight extends Hand {
     }
 
     get message() {
-        return `Straight (${this.getHighRankCard(this.cards)} high)`;
+        return `Straight (${this.getHighRankCard()} high)`;
     }
 }
 
@@ -175,7 +173,7 @@ export class Flush extends Hand {
     }
 
     get message() {
-        return `Flush (${this.getHighRankCard(this.cards)} high)`;
+        return `Flush (${this.getHighRankCard()} high)`;
     }
 }
 
@@ -196,7 +194,7 @@ export class StraightFlush extends Hand {
     }
 
     get message() {
-        return `Straight Flush (${this.getHighRankCard(this.cards)} high)`;
+        return `Straight Flush (${this.getHighRankCard()} high)`;
     }
 }
 
@@ -216,6 +214,6 @@ export class RoyalFlush extends Hand {
     }
 
     get message() {
-        return `Royal Flush (${this.getHighRankCard(this.cards)} high)`;
+        return `Royal Flush (${this.getHighRankCard()} high)`;
     }
 }
