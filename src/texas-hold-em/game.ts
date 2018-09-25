@@ -12,7 +12,7 @@ export class Game {
   }
 
   bestHand() {
-    const evaluator = new HandEvaluator(this.cards);
-    return evaluator.evaluateHand();
+    const handEvaluator = new HandEvaluator(this.cards);
+    return handEvaluator.evaluate();
   }
 }
