@@ -1,7 +1,7 @@
 import { Game } from './game';
 
 fdescribe('Texas Hold Em', () => {
-  fdescribe('invalid cards', () => {
+  describe('invalid cards', () => {
     it('does not accept bad card - 1H', () => {
       expect(() => new Game("2C 3C 4C 5C 6C 7C 1H")).toThrowError(Error, "Invalid rank");
     });
@@ -38,7 +38,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('straight flush', () => {
+    describe('straight flush', () => {
       beforeEach(() => {
         game = new Game("KD 9H 10D 9D JD 6S QD")
       });
@@ -48,7 +48,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('four of a kind', () => {
+    describe('four of a kind', () => {
       beforeEach(() => {
         game = new Game("4C 7D 7H 3S 7C 10H 7S")
       });
@@ -58,7 +58,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('full house with correct high card', () => {
+    describe('full house with correct high card', () => {
       beforeEach(() => {
         game = new Game("AH AC 2D 2H 2C 5S 8S")
       });
@@ -68,7 +68,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('flush beats straight', () => {
+    describe('flush beats straight', () => {
       beforeEach(() => {
         game = new Game("2D 4D 6D 7C 8C 9D 10D")
       });
@@ -78,7 +78,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('straight', () => {
+    describe('straight', () => {
       beforeEach(() => {
         game = new Game("2C 4D AH 6S 5D 3C 10S")
       });
@@ -88,7 +88,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('three of a kind', () => {
+    describe('three of a kind', () => {
       beforeEach(() => {
         game = new Game("4C 7D QH 3S 7H 10H 7S")
       });
@@ -98,7 +98,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('two pair', () => {
+    describe('two pair', () => {
       beforeEach(() => {
         game = new Game("4C 7D QH 3S 7H 10H QS")
       });
@@ -108,7 +108,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('two of a kind', () => {
+    describe('two of a kind', () => {
       beforeEach(() => {
         game = new Game("4C 7D 2H 3S JD 10H 7S")
       });
@@ -118,7 +118,7 @@ fdescribe('Texas Hold Em', () => {
       });
     });
 
-    fdescribe('high card', () => {
+    describe('high card', () => {
       beforeEach(() => {
         game = new Game("4C 7D 2H 3S KD 10H 6S")
       });

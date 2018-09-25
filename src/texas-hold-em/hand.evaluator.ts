@@ -1,4 +1,4 @@
-import { HighCard, TwoOfAKind, TwoPair, ThreeOfAKind, FourOfAKind, FullHouse, Straight, Flush, StraightFlush } from './hand';
+import { HighCard, TwoOfAKind, TwoPair, ThreeOfAKind, FourOfAKind, FullHouse, Straight, Flush, StraightFlush, RoyalFlush } from './hand';
 
 export class HandEvaluator {
     constructor(private cards) {}
@@ -13,7 +13,8 @@ export class HandEvaluator {
             new FullHouse(this.cards).evaluate(),
             new Straight(this.cards).evaluate(),
             new Flush(this.cards).evaluate(),
-            new StraightFlush(this.cards).evaluate()
+            new StraightFlush(this.cards).evaluate(),
+            new RoyalFlush(this.cards).evaluate()
         ].filter(hand => hand);
         return this.getBestHand(hands);
     }

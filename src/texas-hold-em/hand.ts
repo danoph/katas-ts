@@ -200,6 +200,7 @@ export class StraightFlush extends Hand {
         
         const commonSuit = suits[0][0].suit;
         const straightSuit = straightCards.filter(card => card.suit === commonSuit);
+
         if (straightCards.length === 5 && straightSuit.length === 5) {
             return {
                 weight: 1,
@@ -207,5 +208,44 @@ export class StraightFlush extends Hand {
             }
         }
 
+    }
+}
+
+export class RoyalFlush extends Hand {
+    weight = 0;
+
+    sortCards(cards) {
+        return cards.sort((a,b) => a.rankValue - b.rankValue);
+    }
+
+    evaluate() {
+        const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
+        const sortedCards = this.sortCards(this.cards);
+
+        let straightCards = [sortedCards[0]];
+
+        for (let cardIndex in sortedCards) {
+            const index = parseInt(cardIndex);
+            const card = sortedCards[index];
+
+            if (sortedCards[index-1]) {
+                if (card.rankValue === sortedCards[index-1].rankValue + 1) {
+                    straightCards.push(card);
+                } else {
+                    if (straightCards.length >= 5) break;
+                    straightCards = [ card ];
+                }
+            }
+        }
+        
+        const commonSuit = suits[0][0].suit;
+        const straightSuit = straightCards.filter(card => card.suit === commonSuit);
+
+        if (straightCards.length >= 5 && straightSuit.length === 5 && straightCards[straightCards.length - 1].rank === 'A') {
+            return {
+                weight: 0,
+                message: `Royal Flush (${this.getHighRankCard(suits[0])} high)`
+            }
+        }
     }
 }
