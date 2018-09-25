@@ -22,7 +22,7 @@ export class HandEvaluator {
     getBestHand(hands) {
         return hands.reduce((bestHand, hand) => {
           return hand.weight < bestHand.weight ? hand : bestHand
-        }).message;
+        });
     }
 }
 
