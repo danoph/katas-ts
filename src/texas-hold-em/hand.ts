@@ -65,10 +65,11 @@ export class HighCard extends Hand {
     weight = 9;
 
     evaluate() {
-        return {
-            weight: 9,
-            message: `High Card (${this.getHighRankCard(this.cards)} high)`
-        }
+        return new HighCard(this.cards);
+    }
+
+    get message() {
+       return `High Card (${this.getHighRankCard(this.cards)} high)`
     }
 }
 
@@ -78,11 +79,12 @@ export class TwoOfAKind extends Hand {
     evaluate() {
         const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 2) {
-            return {
-                weight: 8,
-                message: `Two of a Kind (${this.getHighRankCard(dupes[0])} high)`
-            }
+            return new TwoOfAKind(dupes[0]);
         }
+    }
+
+    get message() {
+        return `Two of a Kind (${this.getHighRankCard(this.cards)} high)`;
     }
 }
 
@@ -92,11 +94,12 @@ export class TwoPair extends Hand {
     evaluate() {
         const dupes = this.getRankDuplicates();
         if (dupes.length === 2 && dupes[0].length === 2 && dupes[1].length === 2) {
-            return {
-                weight: 7,
-                message: `Two Pair (${this.getHighRankCard([...dupes[0], ...dupes[1]])} high)`
-            }
+            return new TwoPair([...dupes[0], ...dupes[1]]);
         }
+    }
+
+    get message() {
+        return `Two Pair (${this.getHighRankCard(this.cards)} high)`;
     }
 }
 
@@ -106,11 +109,12 @@ export class ThreeOfAKind extends Hand {
     evaluate() {
         const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 3) {
-            return {
-                weight: 6,
-                message: `Three of a Kind (${this.getHighRankCard(dupes[0])} high)`
-            }
+            return new ThreeOfAKind(dupes[0])
         }
+    }
+
+    get message() {
+        return `Three of a Kind (${this.getHighRankCard(this.cards)} high)`
     }
 }
 
@@ -120,11 +124,12 @@ export class FourOfAKind extends Hand {
     evaluate() {
         const dupes = this.getRankDuplicates();
         if (dupes.length === 1 && dupes[0].length === 4) {
-            return {
-                weight: 2,
-                message: `Four of a Kind (${this.getHighRankCard(dupes[0])} high)`
-            }
+            return new FourOfAKind(dupes[0])
         }
+    }
+
+    get message() {
+        return `Four of a Kind (${this.getHighRankCard(this.cards)} high)`
     }
 }
 
@@ -134,11 +139,12 @@ export class FullHouse extends Hand {
     evaluate() {
         const dupes = this.getRankDuplicates().sort((a, b) => b.length - a.length);
         if (dupes.length === 2 && dupes[0].length === 3 && dupes.length === 2) {
-            return {
-                weight: 3,
-                message: `Full House (${this.getHighRankCard(dupes[0])} high)`
-            }
+            return new FullHouse(dupes[0])
         }
+    }
+
+    get message() {
+        return `Full House (${this.getHighRankCard(this.cards)} high)`
     }
 }
 
@@ -148,12 +154,12 @@ export class Straight extends Hand {
     evaluate() {
         const straightCards = this.getStraightCards();
         if (straightCards.length === 5) {
-            return {
-                weight: 5,
-                message: `Straight (${this.getHighRankCard(straightCards)} high)`
-            }
+            return new Straight(straightCards);
         }
-        
+    }
+
+    get message() {
+        return `Straight (${this.getHighRankCard(this.cards)} high)`;
     }
 }
 
@@ -164,11 +170,12 @@ export class Flush extends Hand {
         const suits = this.getSuitDuplicates().sort((a,b) => b.length - a.length);
 
         if (suits[0].length >= 5) {
-            return {
-                weight: 4,
-                message: `Flush (${this.getHighRankCard(suits[0])} high)`
-            }
+            return new Flush(suits[0]);
         }
+    }
+
+    get message() {
+        return `Flush (${this.getHighRankCard(this.cards)} high)`;
     }
 }
 
@@ -183,12 +190,13 @@ export class StraightFlush extends Hand {
         const straightSuit = straightCards.filter(card => card.suit === commonSuit);
 
         if (straightCards.length === 5 && straightSuit.length === 5) {
-            return {
-                weight: 1,
-                message: `Straight Flush (${this.getHighRankCard(suits[0])} high)`
-            }
+            return new StraightFlush(suits[0]);
         }
 
+    }
+
+    get message() {
+        return `Straight Flush (${this.getHighRankCard(this.cards)} high)`;
     }
 }
 
@@ -203,10 +211,11 @@ export class RoyalFlush extends Hand {
         const straightSuit = straightCards.filter(card => card.suit === commonSuit);
 
         if (straightCards.length >= 5 && straightSuit.length === 5 && straightCards[straightCards.length - 1].rank === 'A') {
-            return {
-                weight: 0,
-                message: `Royal Flush (${this.getHighRankCard(suits[0])} high)`
-            }
+            return new RoyalFlush(suits[0]);
         }
+    }
+
+    get message() {
+        return `Royal Flush (${this.getHighRankCard(this.cards)} high)`;
     }
 }
