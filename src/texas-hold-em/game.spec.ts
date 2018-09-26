@@ -1,6 +1,6 @@
 import { Game } from './game';
 
-fdescribe('Texas Hold Em', () => {
+describe('Texas Hold Em', () => {
   describe('invalid cards', () => {
     it('does not accept bad card - 1H', () => {
       expect(() => new Game("2C 3C 4C 5C 6C 7C 1H")).toThrowError(Error, "Invalid rank");
