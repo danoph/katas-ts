@@ -1,5 +1,9 @@
 export class Game {
-    constructor(public grid) {}
+    grid: Cell[][];
+
+    constructor(grid) {
+        this.grid = this.convertGrid(grid);
+    }
 
     start() {
         setInterval(() => {
@@ -15,8 +19,8 @@ export class Game {
         }, 100);
     }
 
-    gridConverter() {
-
+    convertGrid(stringGrid) { // eventually could be number grid
+        return stringGrid.map(row => row.map(cell => cell === '.' ? new LiveCell() : new DeadCell()));
     }
 
     tick() {
@@ -26,11 +30,9 @@ export class Game {
             const row = this.grid[+rowIndex]
 
             for (let cellIndex in row) {
-                const cellString = row[+cellIndex];
-                const living = cellString === '.';
-                const cell = living ? new LiveCell() : new DeadCell();
+                const cell = row[+cellIndex];
                 const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
-                const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
+                const liveNeighborCount = neighbors.filter(neighbor => neighbor.isLiving).length;
                 if (cell.isLiving) {
                     if (liveNeighborCount < 2 || liveNeighborCount > 3) {
                         newRow.push(new DeadCell());
@@ -72,18 +74,18 @@ export class Game {
 }
 
 class Cell {
-    constructor(public isLiving: boolean) {}
+    isLiving: boolean;
 
     toString() {
         return this.isLiving ? "." : " ";
     }
 }
 
-class LiveCell {
+class LiveCell extends Cell {
     isLiving = true;
 }
 
-class DeadCell {
+class DeadCell extends Cell {
     isLiving = false;
 }
 
