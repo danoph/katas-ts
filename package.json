@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "gol:start": "ts-node src/game-of-life/run.ts",
     "test": "jasmine-ts"
   },
   "keywords": [],

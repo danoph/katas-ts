@@ -1,10 +1,19 @@
 export class Game {
     constructor(public grid) {}
 
-    tick(){
+    start() {
+        setInterval(() => {
+            console.clear();
+            this.tick();
+            for (let row of this.grid) {
+                console.log(row);
+            }
+        }, 500);
+    }
+
+    tick() {
         let newGrid = [];
         let newRow = [];
-
         for (let rowIndex in this.grid) {
             const row = this.grid[+rowIndex]
 
