@@ -6,7 +6,7 @@ export class Game {
             console.clear();
             this.tick();
             for (let row of this.grid) {
-                console.log(row);
+                console.log(row.toString().replace(/,/g, ''));
             }
         }, 500);
     }
