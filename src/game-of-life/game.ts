@@ -18,6 +18,8 @@ export class Game {
                     } else {
                         newRow.push('.');
                     }
+                } else {
+                    newRow.push(cell);
                 }
             }
             newGrid.push(newRow);

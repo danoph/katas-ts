@@ -32,5 +32,10 @@ fdescribe('Game of Life', () => {
             game.tick();
             expect(game.grid[0][0]).toEqual(' ');
         });
+
+        it('will blow up', () => {
+            game.tick();
+            expect(game.grid[5][5]).toEqual(' ');
+        });
     })
 })
