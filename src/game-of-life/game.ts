@@ -8,7 +8,7 @@ export class Game {
             for (let row of this.grid) {
                 console.log(row.toString().replace(/,/g, ''));
             }
-        }, 500);
+        }, 100);
     }
 
     tick() {
