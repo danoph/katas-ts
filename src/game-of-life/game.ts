@@ -13,7 +13,7 @@ export class Game {
                 if (cell === '.') {
                     const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
                     const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
-                    if (liveNeighborCount < 2) {
+                    if (liveNeighborCount < 2 || liveNeighborCount > 3) {
                         newRow.push(' ');
                     } else {
                         newRow.push('.');
@@ -33,11 +33,54 @@ export class Game {
         let neighbors = [];
 
         if (y < this.grid.length - 1) {
-            const rightNeighbor = this.grid[y][x+1];
-            const lowerNeighbor = this.grid[y+1][x];
-            const lowerRightNeighbor = this.grid[y+1][x+1];
+            let upperRightNeighbor;
+            let upperNeighbor;
+            let upperLeftNeighbor;
+            let lowerRightNeighbor;
+            let lowerLeftNeighbor;
+            let leftNeighbor;
+            let rightNeighbor;
+            let lowerNeighbor;
 
-            neighbors.push(rightNeighbor, lowerNeighbor, lowerRightNeighbor);
+            if (y != 0) {
+                upperNeighbor = this.grid[y-1][x];
+                if (x !== this.grid[y].length - 1) {
+                    upperRightNeighbor = this.grid[y-1][x+1];    
+                }
+                if (x != 0) {
+                    upperLeftNeighbor = this.grid[y-1][x-1];
+                }
+            }
+            if (x != 0) {
+                leftNeighbor = this.grid[y][x-1];
+            }
+
+            if (x !== this.grid[y].length - 1) {
+                rightNeighbor = this.grid[y][x+1];
+            }
+            
+            if (y !== this.grid.length - 1) {
+                lowerNeighbor = this.grid[y+1][x];
+            }
+
+            if (y !== this.grid.length - 1 && x !== 0) {
+                lowerLeftNeighbor = this.grid[y+1][x-1];
+            }
+            
+            if (y !== this.grid.length - 1 && x !== this.grid[y].length - 1) {
+                lowerRightNeighbor = this.grid[y+1][x+1];    
+            }
+
+            neighbors.push(
+                rightNeighbor, 
+                lowerNeighbor, 
+                lowerRightNeighbor, 
+                upperLeftNeighbor, 
+                upperRightNeighbor, 
+                upperNeighbor, 
+                lowerLeftNeighbor, 
+                leftNeighbor
+            );
         }
         return neighbors;   
     }

@@ -37,5 +37,11 @@ fdescribe('Game of Life', () => {
             game.tick();
             expect(game.grid[5][5]).toEqual(' ');
         });
+
+        it('will die if has more than 3 living neighbors', () => {
+            game.tick();
+            console.log(game.grid);
+            expect(game.grid[2][2]).toEqual(' ');
+        });
     })
 })
