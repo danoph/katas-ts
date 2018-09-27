@@ -1,7 +1,17 @@
+interface PeriodInputGrid {
+    type: string;
+    grid: string[][];
+}
+
+interface NumbersInputGrid {
+    type: string;
+    grid: number[][];
+}
+
 export class Game {
     grid: Cell[][];
 
-    constructor(grid) {
+    constructor(grid: PeriodInputGrid | NumbersInputGrid) {
         this.grid = this.convertGrid(grid);
     }
 
@@ -19,10 +29,21 @@ export class Game {
         }, 100);
     }
 
-    convertGrid(stringGrid) { // eventually could be number grid
-        return stringGrid.map(row => row.map(cell => cell === '.' ? new LiveCell() : new DeadCell()));
+    stringOutput() {
+        return this.grid.map(row => row.map(cell => cell.stringOutput()));
     }
 
+    convertGrid(inputGrid) {
+        let magicString;
+        if (inputGrid.type === 'periods') {
+            magicString = '.';
+        }
+        if (inputGrid.type === 'numbers') {
+            magicString = 1;
+        }
+        return inputGrid.grid.map(row => row.map(cell => cell === magicString ? new LiveCell() : new DeadCell()));
+    }
+ 
     tick() {
         let newGrid = [];
         let newRow = [];
@@ -76,7 +97,7 @@ export class Game {
 class Cell {
     isLiving: boolean;
 
-    toString() {
+    stringOutput() {
         return this.isLiving ? "." : " ";
     }
 }
@@ -88,11 +109,4 @@ class LiveCell extends Cell {
 class DeadCell extends Cell {
     isLiving = false;
 }
-
-// class PeriodCell extends Cell {
-//     constructor() {
-//         super();
-//         this.isLiving = this.cell === '.' ? true : false;
-//     }
-// }
 

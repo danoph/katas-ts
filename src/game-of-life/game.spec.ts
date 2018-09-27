@@ -13,26 +13,18 @@ fdescribe('Game of Life', () => {
 
     describe('Generates cells', () => {
         beforeEach(() => {
-            // grid = {
-            //     type: 'periods',
-            //     grid: [
-            //         ['.', ' ', '.', ' ', '.', ' '],
-            //         [' ', '.', ' ', '.', ' ', '.'],
-            //         ['.', ' ', '.', ' ', '.', ' '],
-            //         [' ', '.', ' ', '.', ' ', '.'],
-            //         ['.', ' ', '.', ' ', '.', ' '],
-            //         [' ', '.', ' ', '.', ' ', '.']
-            //     ]
-            // };
+            grid = {
+                type: 'periods',
+                grid: [
+                    ['.', ' ', '.', ' ', '.', ' '],
+                    [' ', '.', ' ', '.', ' ', '.'],
+                    ['.', ' ', '.', ' ', '.', ' '],
+                    [' ', '.', ' ', '.', ' ', '.'],
+                    ['.', ' ', '.', ' ', '.', ' '],
+                    [' ', '.', ' ', '.', ' ', '.']
+                ]
+            };
 
-            grid = [
-                ['.', ' ', '.', ' ', '.', ' '],
-                [' ', '.', ' ', '.', ' ', '.'],
-                ['.', ' ', '.', ' ', '.', ' '],
-                [' ', '.', ' ', '.', ' ', '.'],
-                ['.', ' ', '.', ' ', '.', ' '],
-                [' ', '.', ' ', '.', ' ', '.']
-            ]
             game = new Game(grid);
         })
         
@@ -58,7 +50,6 @@ fdescribe('Game of Life', () => {
         it('lives if it has 2 or 3 living neighbors', () => {
             game.tick();
             expect(game.grid[2][0].isLiving).toEqual(true);
-            console.log(game.grid);
             expect(game.grid[5][1].isLiving).toEqual(true);
         });
 
@@ -69,30 +60,30 @@ fdescribe('Game of Life', () => {
 
     })
 
-    // describe('passing in 0 and 1 grid', () => {
-    //     beforeEach(() => {
-    //         grid = {
-    //             type: 'numbers',
-    //             grid: [
-    //                 [0,0,0,0,0],
-    //                 [0,0,1,0,0],
-    //                 [0,0,1,0,0],
-    //                 [0,0,1,0,0],
-    //                 [0,0,0,0,0],
-    //             ]
-    //         };
+    describe('passing in 0 and 1 grid', () => {
+        beforeEach(() => {
+            grid = {
+                type: 'numbers',
+                grid: [
+                    [0,0,0,0,0],
+                    [0,0,1,0,0],
+                    [0,0,1,0,0],
+                    [0,0,1,0,0],
+                    [0,0,0,0,0],
+                ]
+            };
 
-    //         game = new Game(grid);
-    //     })
+            game = new Game(grid);
+        })
 
-    //     it('translates grid correctly', () => {
-    //         expect(game.grid).toEqual([
-    //           [' ',' ',' ',' ',' '],
-    //           [' ',' ','.',' ',' '],
-    //           [' ',' ','.',' ',' '],
-    //           [' ',' ','.',' ',' '],
-    //           [' ',' ',' ',' ',' '],
-    //         ]);
-    //     })
-    // })
+        it('translates grid correctly', () => {
+            expect(game.stringOutput()).toEqual([
+              [' ',' ',' ',' ',' '],
+              [' ',' ','.',' ',' '],
+              [' ',' ','.',' ',' '],
+              [' ',' ','.',' ',' '],
+              [' ',' ',' ',' ',' '],
+            ]);
+        })
+    })
 })
