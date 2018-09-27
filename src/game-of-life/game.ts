@@ -6,9 +6,17 @@ export class Game {
             console.clear();
             this.tick();
             for (let row of this.grid) {
-                console.log(row.toString().replace(/,/g, ''));
+                let rowString = '';
+                for (let cell of row) {
+                    rowString += cell.toString();
+                }
+                console.log(rowString);
             }
         }, 100);
+    }
+
+    gridConverter() {
+
     }
 
     tick() {
@@ -18,20 +26,22 @@ export class Game {
             const row = this.grid[+rowIndex]
 
             for (let cellIndex in row) {
-                const cell = row[+cellIndex]    
+                const cellString = row[+cellIndex];
+                const living = cellString === '.';
+                const cell = living ? new LiveCell() : new DeadCell();
                 const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
                 const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
-                if (cell === '.') {
+                if (cell.isLiving) {
                     if (liveNeighborCount < 2 || liveNeighborCount > 3) {
-                        newRow.push(' ');
+                        newRow.push(new DeadCell());
                     } else {
-                        newRow.push('.');
+                        newRow.push(new LiveCell());
                     }
                 } else {
                     if (liveNeighborCount === 3) {
-                        newRow.push('.');
+                        newRow.push(new LiveCell());
                     } else {
-                        newRow.push(' ');
+                        newRow.push(new DeadCell());
                     }
                 }
             }
@@ -60,3 +70,27 @@ export class Game {
       ].filter(cell => cell);
     }
 }
+
+class Cell {
+    constructor(public isLiving: boolean) {}
+
+    toString() {
+        return this.isLiving ? "." : " ";
+    }
+}
+
+class LiveCell {
+    isLiving = true;
+}
+
+class DeadCell {
+    isLiving = false;
+}
+
+// class PeriodCell extends Cell {
+//     constructor() {
+//         super();
+//         this.isLiving = this.cell === '.' ? true : false;
+//     }
+// }
+

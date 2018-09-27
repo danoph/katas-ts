@@ -13,6 +13,18 @@ fdescribe('Game of Life', () => {
 
     describe('Generates cells', () => {
         beforeEach(() => {
+            // grid = {
+            //     type: 'periods',
+            //     grid: [
+            //         ['.', ' ', '.', ' ', '.', ' '],
+            //         [' ', '.', ' ', '.', ' ', '.'],
+            //         ['.', ' ', '.', ' ', '.', ' '],
+            //         [' ', '.', ' ', '.', ' ', '.'],
+            //         ['.', ' ', '.', ' ', '.', ' '],
+            //         [' ', '.', ' ', '.', ' ', '.']
+            //     ]
+            // };
+
             grid = [
                 ['.', ' ', '.', ' ', '.', ' '],
                 [' ', '.', ' ', '.', ' ', '.'],
@@ -20,7 +32,7 @@ fdescribe('Game of Life', () => {
                 [' ', '.', ' ', '.', ' ', '.'],
                 ['.', ' ', '.', ' ', '.', ' '],
                 [' ', '.', ' ', '.', ' ', '.']
-            ];
+            ]
             game = new Game(grid);
         })
         
@@ -30,30 +42,57 @@ fdescribe('Game of Life', () => {
 
         it('first cell will be dead', () => {
             game.tick();
-            expect(game.grid[0][0]).toEqual(' ');
+            expect(game.grid[0][0].isLiving).toEqual(false);
         });
 
         it('will blow up', () => {
             game.tick();
-            expect(game.grid[5][5]).toEqual(' ');
+            expect(game.grid[5][5].isLiving).toEqual(false);
         });
 
         it('will die if has more than 3 living neighbors', () => {
             game.tick();
-            expect(game.grid[2][2]).toEqual(' ');
+            expect(game.grid[2][2].isLiving).toEqual(false);
         });
 
         it('lives if it has 2 or 3 living neighbors', () => {
             game.tick();
-            expect(game.grid[2][0]).toEqual('.');
+            expect(game.grid[2][0].isLiving).toEqual(true);
             console.log(game.grid);
-            expect(game.grid[5][1]).toEqual('.');
+            expect(game.grid[5][1].isLiving).toEqual(true);
         });
 
         it('will create a living cell if it has exactly 3 live neighbors', () => {
             game.tick();
-            expect(game.grid[1][0]).toEqual('.');
+            expect(game.grid[1][0].isLiving).toEqual(true);
         });
 
     })
+
+    // describe('passing in 0 and 1 grid', () => {
+    //     beforeEach(() => {
+    //         grid = {
+    //             type: 'numbers',
+    //             grid: [
+    //                 [0,0,0,0,0],
+    //                 [0,0,1,0,0],
+    //                 [0,0,1,0,0],
+    //                 [0,0,1,0,0],
+    //                 [0,0,0,0,0],
+    //             ]
+    //         };
+
+    //         game = new Game(grid);
+    //     })
+
+    //     it('translates grid correctly', () => {
+    //         expect(game.grid).toEqual([
+    //           [' ',' ',' ',' ',' '],
+    //           [' ',' ','.',' ',' '],
+    //           [' ',' ','.',' ',' '],
+    //           [' ',' ','.',' ',' '],
+    //           [' ',' ',' ',' ',' '],
+    //         ]);
+    //     })
+    // })
 })
