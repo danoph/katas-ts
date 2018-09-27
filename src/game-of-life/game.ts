@@ -13,6 +13,7 @@ export class Game {
                 if (cell === '.') {
                     const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
                     const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
+
                     if (liveNeighborCount < 2 || liveNeighborCount > 3) {
                         newRow.push(' ');
                     } else {
@@ -32,7 +33,7 @@ export class Game {
     getNeighbors(x, y) {
         let neighbors = [];
 
-        if (y < this.grid.length - 1) {
+        if (y <= this.grid.length - 1) {
             let upperRightNeighbor;
             let upperNeighbor;
             let upperLeftNeighbor;
