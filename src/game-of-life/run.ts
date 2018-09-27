@@ -63,7 +63,5 @@ const randomGrid = (width, height) => {
 
 const myRandomGrid = randomGrid(100, 100);
 
-//const blinkerTranslated = blinker.map(row => row.map(cell => cell === 0 ? ' ' : '.' ));
-
 const game = new Game(myRandomGrid);
 game.start();

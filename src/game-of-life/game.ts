@@ -42,68 +42,21 @@ export class Game {
         this.grid = newGrid;
     }
 
+    // return a cell or undefined
+    getCellAt(x, y) {
+        return this.grid[y] && this.grid[y][x];
+    }
+
     getNeighbors(x, y) {
-        let neighbors = [];
-
-        if (y <= this.grid.length - 1) {
-            let upperRightNeighbor;
-            let upperNeighbor;
-            let upperLeftNeighbor;
-            let lowerRightNeighbor;
-            let lowerLeftNeighbor;
-            let leftNeighbor;
-            let rightNeighbor;
-            let lowerNeighbor;
-
-            if (y != 0) {
-                upperNeighbor = this.grid[y-1][x];
-                if (x !== this.grid[y].length - 1) {
-                    upperRightNeighbor = this.grid[y-1][x+1];    
-                }
-                if (x != 0) {
-                    upperLeftNeighbor = this.grid[y-1][x-1];
-                }
-            }
-            if (x != 0) {
-                leftNeighbor = this.grid[y][x-1];
-            }
-
-            if (x !== this.grid[y].length - 1) {
-                rightNeighbor = this.grid[y][x+1];
-            }
-            
-            if (y !== this.grid.length - 1) {
-                lowerNeighbor = this.grid[y+1][x];
-            }
-
-            if (y !== this.grid.length - 1 && x !== 0) {
-                lowerLeftNeighbor = this.grid[y+1][x-1];
-            }
-            
-            if (y !== this.grid.length - 1 && x !== this.grid[y].length - 1) {
-                lowerRightNeighbor = this.grid[y+1][x+1];    
-            }
-
-            neighbors.push(
-                rightNeighbor, 
-                lowerNeighbor, 
-                lowerRightNeighbor, 
-                upperLeftNeighbor, 
-                upperRightNeighbor, 
-                upperNeighbor, 
-                lowerLeftNeighbor, 
-                leftNeighbor
-            );
-        }
-        return neighbors;   
+      return [
+        this.getCellAt(x+1,y-1),
+        this.getCellAt(x,y-1),
+        this.getCellAt(x-1,y-1),
+        this.getCellAt(x+1,y+1),
+        this.getCellAt(x-1,y+1),
+        this.getCellAt(x-1,y),
+        this.getCellAt(x+1,y),
+        this.getCellAt(x,y+1)
+      ].filter(cell => cell);
     }
 }
-
-class Cell {
-    living: boolean;
-    constructor(private isAlive) {
-        this.living = isAlive;
-    }
-}
-
-// 12 x 12
