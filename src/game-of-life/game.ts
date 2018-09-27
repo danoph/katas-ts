@@ -10,17 +10,20 @@ export class Game {
 
             for (let cellIndex in row) {
                 const cell = row[+cellIndex]    
+                const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
+                const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
                 if (cell === '.') {
-                    const neighbors = this.getNeighbors(+cellIndex, +rowIndex);
-                    const liveNeighborCount = neighbors.filter(neighbor => neighbor === '.').length;
-
                     if (liveNeighborCount < 2 || liveNeighborCount > 3) {
                         newRow.push(' ');
                     } else {
                         newRow.push('.');
                     }
                 } else {
-                    newRow.push(cell);
+                    if (liveNeighborCount === 3) {
+                        newRow.push('.');
+                    } else {
+                        newRow.push(' ');
+                    }
                 }
             }
             newGrid.push(newRow);

@@ -43,11 +43,16 @@ fdescribe('Game of Life', () => {
             expect(game.grid[2][2]).toEqual(' ');
         });
 
-        fit('lives if it has 2 or 3 living neighbors', () => {
+        it('lives if it has 2 or 3 living neighbors', () => {
             game.tick();
             expect(game.grid[2][0]).toEqual('.');
             console.log(game.grid);
             expect(game.grid[5][1]).toEqual('.');
+        });
+
+        it('will create a living cell if it has exactly 3 live neighbors', () => {
+            game.tick();
+            expect(game.grid[1][0]).toEqual('.');
         });
 
     })
