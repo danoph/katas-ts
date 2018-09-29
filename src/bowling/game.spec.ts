@@ -67,6 +67,7 @@ fdescribe('Game', () => {
       });
     });
 
+    // If it makes 10 frame that is a valid game so I adjusted it to 9
     describe('not enough strikes', () => {
       beforeEach(() => {
         frames = "X".repeat(10);
@@ -90,7 +91,8 @@ fdescribe('Game', () => {
     // I had to modify the frames variable to have a second throw since 4 is not valid
     fdescribe('too many throws throws an exception', () => {
       beforeEach(() => {
-        frames = "4-".repeat(21);
+        frames = "4".repeat(21);
+        console.log({frames});
       });
 
       it('throws an exception', () => {
@@ -98,7 +100,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('knocking down 10 pins requires a spare', () => {
+    fdescribe('knocking down 10 pins requires a spare', () => {
       beforeEach(() => {
         frames = "55" + "-".repeat(18);
       });
@@ -144,7 +146,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('valid tenth frame issues', () => {
+    fdescribe('valid tenth frame issues', () => {
       let goodTenthFrames;
 
       beforeEach(() => {
