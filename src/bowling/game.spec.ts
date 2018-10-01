@@ -92,7 +92,6 @@ fdescribe('Game', () => {
     fdescribe('too many throws throws an exception', () => {
       beforeEach(() => {
         frames = "4".repeat(21);
-        console.log({frames});
       });
 
       it('throws an exception', () => {

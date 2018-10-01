@@ -7,7 +7,7 @@ export const BOWLING_TOO_MANY_PINS = 'BOWLING_TOO_MANY_PINS';
 export class Game {
   constructor(framesString: string) {
     const frames = new FrameParser(framesString).parse();
-    const frameValidator = new FrameValidator(frames).validate();
+    // const frameValidator = new FrameValidator(frames).validate();
   }
 
   score() {
@@ -15,61 +15,61 @@ export class Game {
   }
 }
 
-type InterfaceFrame = {
-  ball1: string,
-  ball2: string,
-  ball3: string
-};
+// type InterfaceFrame = {
+//   ball1: string,
+//   ball2: string,
+//   ball3: string
+// };
 
-type InterfaceFrames = Array<InterfaceFrame>;
+// type InterfaceFrames = Array<InterfaceFrame>;
 
-class FrameValidator {
-  error = new ErrorFactory();
-  constructor(private frames: InterfaceFrames) {}
+// class FrameValidator {
+//   error = new ErrorFactory();
+//   constructor(private frames: InterfaceFrames) {}
 
-  validate() {
-    this.validRolls();
-    this.validSpares();
-    this.validStrikes();
-    this.validGameLength();
-  }
+//   validate() {
+//     this.validRolls();
+//     this.validSpares();
+//     this.validStrikes();
+//     this.validGameLength();
+//   }
 
-  validRolls() {
-    return this.frames.filter(frame => {
-      console.log('frame.ball1 + frame.ball2 > 9 : ' , parseInt(frame.ball1) + parseInt(frame.ball2), ' > 9 ' , parseInt(frame.ball1) + parseInt(frame.ball2) > 9);
-      if (parseInt(frame.ball1) + parseInt(frame.ball2) > 9 || parseInt(frame.ball2) + parseInt(frame.ball3) > 9) {
-        this.error.throw(BOWLING_TOO_MANY_PINS);
-      }
-    })
-  }
+//   validRolls() {
+//     return this.frames.filter(frame => {
+//       //console.log('frame.ball1 + frame.ball2 > 9 : ' , parseInt(frame.ball1) + parseInt(frame.ball2), ' > 9 ' , parseInt(frame.ball1) + parseInt(frame.ball2) > 9);
+//       if (parseInt(frame.ball1) + parseInt(frame.ball2) > 9 || parseInt(frame.ball2) + parseInt(frame.ball3) > 9) {
+//         this.error.throw(BOWLING_TOO_MANY_PINS);
+//       }
+//     })
+//   }
   
-  validSpares() {
-    return this.frames.filter(frame => {
-      if ("" + frame.ball1 === '/') {
-        this.error.throw(BOWLING_SPARE_TOO_EARLY);
-      }
-    });
-  }
+//   validSpares() {
+//     return this.frames.filter(frame => {
+//       if ("" + frame.ball1 === '/') {
+//         this.error.throw(BOWLING_SPARE_TOO_EARLY);
+//       }
+//     });
+//   }
 
-  validStrikes() {
-    return this.frames.filter(frame => {
-      if ("" + frame.ball2 === 'X') {
-        this.error.throw(BOWLING_STRIKE_TOO_LATE);
-      }
-    });
-  }
+//   validStrikes() {
+//     return this.frames.filter(frame => {
+//       if ("" + frame.ball2 === 'X') {
+//         this.error.throw(BOWLING_STRIKE_TOO_LATE);
+//       }
+//     });
+//   }
 
-  validGameLength() {
-    if (this.frames.length > 10) {
-      this.error.throw(BOWLING_GAME_TOO_LONG);
-    } else if (this.frames.length < 10) {
-      this.error.throw(BOWLING_GAME_TOO_SHORT);
-    }
-  }
-}
+//   validGameLength() {
+//     if (this.frames.length > 10) {
+//       this.error.throw(BOWLING_GAME_TOO_LONG);
+//     } else if (this.frames.length < 10) {
+//       this.error.throw(BOWLING_GAME_TOO_SHORT);
+//     }
+//   }
+// }
 
 class ErrorFactory {
-  errorMap = {
+  static ERROR_MAP = {
     'BOWLING_GAME_TOO_SHORT': 'Game too short - should not accept an invalid game',
     'BOWLING_GAME_TOO_LONG': 'Game too long - should not accept a game that is too long',
     'BOWLING_SPARE_TOO_EARLY': 'Spare too early - should not allow a spare at the start of a frame',
@@ -79,81 +79,110 @@ class ErrorFactory {
 
   constructor() {}
 
-  throw(error) {
-    throw new Error(this.errorMap[error]);
+  throw(errorKey) {
+    throw new Error(ErrorFactory.ERROR_MAP[errorKey]);
+  }
+}
+
+class Throw {
+  constructor(public value: number) {}
+
+  isStrike() {
+    return false;
+  }
+
+  isSpare() {
+    return false;
+  }
+}
+
+class Strike extends Throw {
+  isStrike() {
+    return true;
+  }
+}
+
+class Spare extends Throw {
+  isSpare() {
+    return true;
+  }
+}
+
+class ThrowFactory {
+  static build(throwString) {
+    switch (throwString) {
+      case 'X':
+        return new Strike(10);
+      case '/':
+        return new Spare(10);
+      default: 
+        return new Throw(parseInt(throwString));
+    }
   }
 }
 
 class FrameParser {
-  constructor(private frameString) {}
+  throws: Throw[];
+
+  constructor(frameString) {
+    this.throws = frameString.split('')
+      .map(throwString => ThrowFactory.build(throwString));
+  }
 
   parse() {
-    let framesArray = [];
-    let frameArray = [];
     let frames = [];
+    let currentFrame = new Frame();
 
-    const framesSplit = this.frameString.split('');
+    for (let currentThrow of this.throws) {
+      currentFrame.addThrow(currentThrow);
 
-    for (let frameIndex in framesSplit) {
-      let index = parseInt(frameIndex);
-
-      if (framesSplit[index] === 'X' && frameArray.length === 0) {
-        framesArray.push(new Strike([framesSplit[index]]));
-        frameArray = [];
-      } else {
-        frameArray.push(framesSplit[index]);
+      if (currentFrame.isFinished()) {
+        frames.push(currentFrame);
+        currentFrame = frames.length === 9 ? new TenthFrame() : new Frame();
       }
-
-      if (frameArray.length === 2 && framesArray.length < 9) {
-        framesArray.push(new Frame(frameArray));
-        frameArray = [];
-      } else if (framesArray.length === 9) {
-        const tenthFrame = framesSplit.slice(index, framesSplit.length);
-        framesArray.push(new TenthFrame(tenthFrame));
-        frameArray = [];
-      }
-    }
-
-    for (let frame of framesArray) {
-      frames.push(frame);
     }
 
     return frames;
   }
-
 }
 
 class Frame {
   type: string;
-  ball1: string;
-  ball2: string;
-  constructor(public frame) {
-    this.type = 'frame';
-    this.ball1 = frame[0];
-    this.ball2 = frame[1] ? frame[1] : null;
-  }
-}
+  throws: Throw[] = [];
 
-class Strike extends Frame {
-  constructor(public frame) {
-    super(frame);
-    this.type = 'strike';
-    this.ball1 = this.frame[0];
-  }
-}
+  addThrow(ball: Throw) {
+    if (ball.isSpare() && this.throws.length === 0) {
+      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_SPARE_TOO_EARLY]);
+    }
 
-class Spare extends Frame {
-  ball1: string;
-  ball2: string;
+    if (this.throws.length === 1 && ball.value + this.throws[0].value === 10) {
+      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_TOO_MANY_PINS]);
+    }
+
+    if (this.throws.length === 1 && ball.isStrike()) {
+      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_STRIKE_TOO_LATE]);
+    }
+
+    this.throws.push(ball);
+  }
+
+  score() {
+    return this.throws.reduce((sum, cur) => sum + cur.value, 0);
+  }
+
+  isFinished() {
+    return this.throws.length === 2 || this.throws[0].isStrike();
+  }
 }
 
 class TenthFrame extends Frame {
-  ball3: string;
-  constructor(public frame) {
-    super(frame);
-    this.type = 'tenthFrame';
-    this.ball1 = this.frame[0];
-    this.ball2 = frame[1] ? frame[1] : null;
-    this.ball3 = frame[2] ? frame[2] : null;
+  isFinished() {
+    return this.throws.length === 3;
+  }
+
+  addThrow(ball: Throw) {
+    if (this.throws.length === 2 && this.score() === 10) {
+      this.throws.push(ball);
+    }
   }
 }
