@@ -173,6 +173,10 @@ class Frame {
   isFinished() {
     return this.throws.length === 2 || this.throws[0].isStrike();
   }
+
+  strikeOrSpareThrown() {
+    return !!this.throws.find(ball => ball.isStrike() || ball.isSpare());
+  }
 }
 
 class TenthFrame extends Frame {
@@ -181,8 +185,15 @@ class TenthFrame extends Frame {
   }
 
   addThrow(ball: Throw) {
-    if (this.throws.length === 2 && this.score() === 10) {
+
+    if (this.throws.length < 2) {
       this.throws.push(ball);
+    } else { 
+      if (this.strikeOrSpareThrown()) {
+        this.throws.push(ball);
+      } else {
+        throw new Error(ErrorFactory.ERROR_MAP[BOWLING_GAME_TOO_LONG]);
+      }
     }
   }
 }

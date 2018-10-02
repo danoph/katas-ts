@@ -161,7 +161,10 @@ fdescribe('Game', () => {
       });
 
       it('does not throw error', () => {
-        expect(() => new Game(frames)).not.toThrow();
+        for (let frame in goodTenthFrames) {
+          frames = "-".repeat(18) + frame;
+          expect(() => new Game(frames)).not.toThrow();
+        }
       });
     });
   });
