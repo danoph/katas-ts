@@ -67,12 +67,11 @@ fdescribe('Game', () => {
       });
     });
 
-    // If it makes 10 frame that is a valid game so I adjusted it to 9
     describe('not enough strikes', () => {
       beforeEach(() => {
         frames = "X".repeat(10);
       });
-
+      
       it('throws an exception', () => {
         expect(() => new Game(frames)).toThrowError(Error, "Game too short - should not accept an invalid game");
       });
@@ -119,7 +118,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('tenth frame issues', () => {
+    fdescribe('tenth frame issues', () => {
       let badTenthFrames;
 
       beforeEach(() => {
@@ -140,7 +139,7 @@ fdescribe('Game', () => {
         for (let frame in badTenthFrames) {
           frames = "-".repeat(18) + frame;
           const expectedError = badTenthFrames[frame];
-          expect(() => new Game(frames)).toThrowError(expectedError);
+          expect(() => new Game(frames)).toThrowError(Error, expectedError);
         }
       });
     });

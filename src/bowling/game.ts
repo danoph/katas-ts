@@ -1,86 +1,19 @@
-export const BOWLING_GAME_TOO_SHORT = 'BOWLING_GAME_TOO_SHORT';
-export const BOWLING_GAME_TOO_LONG = 'BOWLING_GAME_TOO_LONG';
-export const BOWLING_SPARE_TOO_EARLY = 'BOWLING_SPARE_TOO_EARLY';
-export const BOWLING_STRIKE_TOO_LATE = 'BOWLING_STRIKE_TOO_LATE';
-export const BOWLING_TOO_MANY_PINS = 'BOWLING_TOO_MANY_PINS';
+export const BOWLING_GAME_TOO_SHORT = 'Game too short - should not accept an invalid game';
+export const BOWLING_GAME_TOO_LONG = 'Game too long - should not accept a game that is too long';
+export const BOWLING_SPARE_TOO_EARLY = 'Spare too early - should not allow a spare at the start of a frame';
+export const BOWLING_STRIKE_TOO_LATE = 'Strike too late - spares must occur at the end of a frame';
+export const BOWLING_TOO_MANY_PINS = 'Too many pins - knocking down 10 pins requires a spare';
 
 export class Game {
   constructor(framesString: string) {
-    const frames = new FrameParser(framesString).parse();
-    // const frameValidator = new FrameValidator(frames).validate();
+    const frameParser = new FrameParser(framesString);
+    const frames = frameParser.parse();
+    const tenthFrameValidator = new TenthFrameValidator(frames[9]);
+    tenthFrameValidator.validate();
   }
 
   score() {
     return 0;
-  }
-}
-
-// type InterfaceFrame = {
-//   ball1: string,
-//   ball2: string,
-//   ball3: string
-// };
-
-// type InterfaceFrames = Array<InterfaceFrame>;
-
-// class FrameValidator {
-//   error = new ErrorFactory();
-//   constructor(private frames: InterfaceFrames) {}
-
-//   validate() {
-//     this.validRolls();
-//     this.validSpares();
-//     this.validStrikes();
-//     this.validGameLength();
-//   }
-
-//   validRolls() {
-//     return this.frames.filter(frame => {
-//       //console.log('frame.ball1 + frame.ball2 > 9 : ' , parseInt(frame.ball1) + parseInt(frame.ball2), ' > 9 ' , parseInt(frame.ball1) + parseInt(frame.ball2) > 9);
-//       if (parseInt(frame.ball1) + parseInt(frame.ball2) > 9 || parseInt(frame.ball2) + parseInt(frame.ball3) > 9) {
-//         this.error.throw(BOWLING_TOO_MANY_PINS);
-//       }
-//     })
-//   }
-  
-//   validSpares() {
-//     return this.frames.filter(frame => {
-//       if ("" + frame.ball1 === '/') {
-//         this.error.throw(BOWLING_SPARE_TOO_EARLY);
-//       }
-//     });
-//   }
-
-//   validStrikes() {
-//     return this.frames.filter(frame => {
-//       if ("" + frame.ball2 === 'X') {
-//         this.error.throw(BOWLING_STRIKE_TOO_LATE);
-//       }
-//     });
-//   }
-
-//   validGameLength() {
-//     if (this.frames.length > 10) {
-//       this.error.throw(BOWLING_GAME_TOO_LONG);
-//     } else if (this.frames.length < 10) {
-//       this.error.throw(BOWLING_GAME_TOO_SHORT);
-//     }
-//   }
-// }
-
-class ErrorFactory {
-  static ERROR_MAP = {
-    'BOWLING_GAME_TOO_SHORT': 'Game too short - should not accept an invalid game',
-    'BOWLING_GAME_TOO_LONG': 'Game too long - should not accept a game that is too long',
-    'BOWLING_SPARE_TOO_EARLY': 'Spare too early - should not allow a spare at the start of a frame',
-    'BOWLING_STRIKE_TOO_LATE': 'Strike too late - spares must occur at the end of a frame',
-    'BOWLING_TOO_MANY_PINS': 'Too many pins - knocking down 10 pins requires a spare'
-  };
-
-  constructor() {}
-
-  throw(errorKey) {
-    throw new Error(ErrorFactory.ERROR_MAP[errorKey]);
   }
 }
 
@@ -108,6 +41,10 @@ class Spare extends Throw {
   }
 }
 
+class GutterBall extends Throw {
+  
+}
+
 class ThrowFactory {
   static build(throwString) {
     switch (throwString) {
@@ -115,6 +52,8 @@ class ThrowFactory {
         return new Strike(10);
       case '/':
         return new Spare(10);
+      case '-':
+        return new GutterBall(0);  
       default: 
         return new Throw(parseInt(throwString));
     }
@@ -130,16 +69,16 @@ class FrameParser {
   }
 
   parse() {
-    let frames = [];
     let currentFrame = new Frame();
+    let frames = [ currentFrame ];
 
     for (let currentThrow of this.throws) {
-      currentFrame.addThrow(currentThrow);
-
       if (currentFrame.isFinished()) {
-        frames.push(currentFrame);
         currentFrame = frames.length === 9 ? new TenthFrame() : new Frame();
+        frames.push(currentFrame);
       }
+
+      currentFrame.addThrow(currentThrow); 
     }
 
     return frames;
@@ -152,15 +91,15 @@ class Frame {
 
   addThrow(ball: Throw) {
     if (ball.isSpare() && this.throws.length === 0) {
-      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_SPARE_TOO_EARLY]);
+      throw new Error(BOWLING_SPARE_TOO_EARLY);
     }
 
-    if (this.throws.length === 1 && ball.value + this.throws[0].value === 10) {
-      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_TOO_MANY_PINS]);
+    if (this.throws.length === 1 && ball.value + this.score() === 10) {
+      throw new Error(BOWLING_TOO_MANY_PINS);
     }
 
     if (this.throws.length === 1 && ball.isStrike()) {
-      throw new Error(ErrorFactory.ERROR_MAP[BOWLING_STRIKE_TOO_LATE]);
+      throw new Error(BOWLING_STRIKE_TOO_LATE);
     }
 
     this.throws.push(ball);
@@ -171,11 +110,23 @@ class Frame {
   }
 
   isFinished() {
-    return this.throws.length === 2 || this.throws[0].isStrike();
+    return this.throws.length === 2 || this.strikeThrown();
+  }
+
+  strikeThrown() {
+    return !!this.throws.find(ball => ball.isStrike());
+  }
+
+  spareThrown() {
+    return !!this.throws.find(ball => ball.isSpare());
   }
 
   strikeOrSpareThrown() {
-    return !!this.throws.find(ball => ball.isStrike() || ball.isSpare());
+    return this.strikeThrown() || this.spareThrown();
+  }
+
+  numberOfThrows() {
+    return this.throws.length;
   }
 }
 
@@ -185,15 +136,27 @@ class TenthFrame extends Frame {
   }
 
   addThrow(ball: Throw) {
-
     if (this.throws.length < 2) {
       this.throws.push(ball);
     } else { 
       if (this.strikeOrSpareThrown()) {
         this.throws.push(ball);
       } else {
-        throw new Error(ErrorFactory.ERROR_MAP[BOWLING_GAME_TOO_LONG]);
+        throw new Error(BOWLING_GAME_TOO_LONG);
       }
     }
   }
+}
+
+class TenthFrameValidator {
+  constructor(private frame: TenthFrame) {}
+
+  validate() {
+    if (this.frame.strikeOrSpareThrown() && this.frame.numberOfThrows() !== 3) {
+      throw new Error(BOWLING_GAME_TOO_SHORT);
+    }
+
+
+  }
+
 }
