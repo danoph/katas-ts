@@ -90,16 +90,18 @@ class Frame {
   throws: Throw[] = [];
 
   addThrow(ball: Throw) {
-    if (ball.isSpare() && this.throws.length === 0) {
-      throw new Error(BOWLING_SPARE_TOO_EARLY);
-    }
+    if (this.throws.length === 0) {
+      if (ball.isSpare()) {
+        throw new Error(BOWLING_SPARE_TOO_EARLY);
+      }
+    } else if (this.throws.length === 1) {
+      if (ball.isStrike()) {
+        throw new Error(BOWLING_STRIKE_TOO_LATE);
+      }
 
-    if (this.throws.length === 1 && ball.value + this.score() === 10) {
-      throw new Error(BOWLING_TOO_MANY_PINS);
-    }
-
-    if (this.throws.length === 1 && ball.isStrike()) {
-      throw new Error(BOWLING_STRIKE_TOO_LATE);
+      if (ball.value + this.score() === 10) {
+        throw new Error(BOWLING_TOO_MANY_PINS);
+      }
     }
 
     this.throws.push(ball);
