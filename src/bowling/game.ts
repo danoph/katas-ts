@@ -55,8 +55,9 @@ class Strike extends Throw {
     return true;
   }
 
+  // need to remove this
   value() {
-    return 10;
+    return -1;
   }
 }
 
@@ -65,8 +66,9 @@ class Spare extends Throw {
     return true;
   }
 
+  // need to remove this
   value() {
-    return 10;
+    return -1;
   }
 }
 
@@ -139,7 +141,19 @@ class Frame {
   }
 
   score() {
-    return this.throws.reduce((sum, cur) => sum + cur.value(), 0);
+    let score = 0;
+
+    for (let ball of this.throws) {
+      if (ball.isStrike()) {
+        score += 10;
+      } else if (ball.isSpare()) {
+        score += 10 - this.firstThrow().value();
+      } else {
+        score += ball.value();
+      }
+    }
+
+    return score;
   }
 
   isFinished() {

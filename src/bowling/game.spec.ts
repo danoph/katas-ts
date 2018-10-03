@@ -34,7 +34,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('no spares', () => {
+    fdescribe('no spares', () => {
       beforeEach(() => {
         frames = "9-".repeat(10);
         game = new Game(frames);
