@@ -26,8 +26,17 @@ class FrameScorer {
   score() {
     let score = 0;
 
-    for (let frame of this.frames) {
+    for (let index in this.frames) {
+      const frame = this.frames[+index];
+      const nextFrame = this.frames[+index+1];
+
       score += frame.score();
+
+      if (frame.spareThrown()) {
+        if (!frame.isTenthFrame()) {
+          score += nextFrame.firstThrow().value();
+        }
+      }
     }
 
     return score;
@@ -68,6 +77,7 @@ class Spare extends Throw {
 
   // need to remove this
   value() {
+    // never gets used
     return -1;
   }
 }
@@ -187,11 +197,19 @@ class Frame {
   thirdThrow() {
     return this.throws[2];
   }
+
+  isTenthFrame() {
+    return false;
+  }
 }
 
 class TenthFrame extends Frame {
   isFinished() {
     return this.throws.length === 3;
+  }
+
+  isTenthFrame() {
+    return true;
   }
 
   addThrow(ball: Throw) {

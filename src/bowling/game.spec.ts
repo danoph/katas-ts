@@ -45,7 +45,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('all spares', () => {
+    fdescribe('all spares', () => {
       beforeEach(() => {
         frames = "9/".repeat(10) + '9';
         game = new Game(frames);
