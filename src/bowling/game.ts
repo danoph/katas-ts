@@ -43,21 +43,17 @@ class FrameScorer {
         if (!frame.isTenthFrame()) {
           score += nextFrame.firstThrowValue();
 
-          if (nextFrame.isTenthFrame()) {
-            score += nextFrame.secondThrowValue();
-          }
-
           if (nextFrame.strikeThrown()) {
             if (nextNextFrame) {
               score += nextNextFrame.firstThrowValue();
+            } else {
+              score += nextFrame.secondThrowValue();
             }
+          } else {
+            score += nextFrame.secondThrowValue();
           }
-          // } else {
-          //   score += nextFrame.secondThrow().value();
-          // }
         }
       }
-
     }
 
     return score;
@@ -87,7 +83,7 @@ class Strike extends Throw {
 
   // need to remove this
   value() {
-    return -1;
+    return 50;
   }
 }
 
@@ -99,7 +95,7 @@ class Spare extends Throw {
   // need to remove this
   value() {
     // never gets used
-    return -1;
+    return 50;
   }
 }
 

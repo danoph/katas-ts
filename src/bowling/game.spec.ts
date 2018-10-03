@@ -56,7 +56,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('sample game', () => {
+    fdescribe('sample game', () => {
       beforeEach(() => {
         frames = "X7/729/XXX236/7/3";
         game = new Game(frames);
