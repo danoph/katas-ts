@@ -5,20 +5,37 @@ export const BOWLING_STRIKE_TOO_LATE = 'Strike too late - spares must occur at t
 export const BOWLING_TOO_MANY_PINS = 'Too many pins - knocking down 10 pins requires a spare';
 
 export class Game {
+  private frames: Frame[];
+
   constructor(framesString: string) {
     const frameParser = new FrameParser(framesString);
-    const frames = frameParser.parse();
-    const tenthFrameValidator = new TenthFrameValidator(frames[9]);
+    this.frames = frameParser.parse();
+    const tenthFrameValidator = new TenthFrameValidator(this.frames[9]);
     tenthFrameValidator.validate();
   }
 
   score() {
-    return 0;
+    const frameScorer = new FrameScorer(this.frames);
+    return frameScorer.score();
+  }
+}
+
+class FrameScorer {
+  constructor(private frames: Frame[]) {}
+
+  score() {
+    let score = 0;
+
+    for (let frame of this.frames) {
+      score += frame.score();
+    }
+
+    return score;
   }
 }
 
 class Throw {
-  constructor(public value: number) {}
+  constructor(private _throwString: string) {}
 
   isStrike() {
     return false;
@@ -26,6 +43,10 @@ class Throw {
 
   isSpare() {
     return false;
+  }
+
+  value() {
+    return +this._throwString;
   }
 }
 
@@ -33,29 +54,39 @@ class Strike extends Throw {
   isStrike() {
     return true;
   }
+
+  value() {
+    return 10;
+  }
 }
 
 class Spare extends Throw {
   isSpare() {
     return true;
   }
+
+  value() {
+    return 10;
+  }
 }
 
 class GutterBall extends Throw {
-  
+  value() {
+    return 0;
+  }
 }
 
 class ThrowFactory {
   static build(throwString) {
     switch (throwString) {
       case 'X':
-        return new Strike(10);
+        return new Strike(throwString);
       case '/':
-        return new Spare(10);
+        return new Spare(throwString);
       case '-':
-        return new GutterBall(0);  
+        return new GutterBall(throwString);  
       default: 
-        return new Throw(parseInt(throwString));
+        return new Throw(throwString);
     }
   }
 }
@@ -99,7 +130,7 @@ class Frame {
         throw new Error(BOWLING_STRIKE_TOO_LATE);
       }
 
-      if (ball.value + this.score() === 10) {
+      if (ball.value() + this.score() === 10) {
         throw new Error(BOWLING_TOO_MANY_PINS);
       }
     }
@@ -108,7 +139,7 @@ class Frame {
   }
 
   score() {
-    return this.throws.reduce((sum, cur) => sum + cur.value, 0);
+    return this.throws.reduce((sum, cur) => sum + cur.value(), 0);
   }
 
   isFinished() {

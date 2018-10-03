@@ -12,7 +12,7 @@ fdescribe('Game', () => {
   let frames;
 
   describe('#score', () => {
-    describe('gutterball game', () => {
+    fdescribe('gutterball game', () => {
       beforeEach(() => {
         frames = "-".repeat(20);
         game = new Game(frames);
