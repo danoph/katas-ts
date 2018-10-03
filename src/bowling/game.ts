@@ -8,8 +8,8 @@ export class Game {
   private frames: Frame[];
 
   constructor(framesString: string) {
-    const frameParser = new FrameParser(framesString);
-    this.frames = frameParser.parse();
+    const frameParser = new FrameParser();
+    this.frames = frameParser.parse(framesString);
 
     for (let frame of this.frames) {
       frame.validate();
@@ -63,7 +63,7 @@ class FrameScorer {
 }
 
 class Throw {
-  constructor(private _throwString: string) {}
+  constructor(private _value: number) {}
 
   isStrike() {
     return false;
@@ -74,7 +74,7 @@ class Throw {
   }
 
   value() {
-    return +this._throwString;
+    return this._value;
   }
 }
 
@@ -82,62 +82,39 @@ class Strike extends Throw {
   isStrike() {
     return true;
   }
-
-  // need to remove this
-  value() {
-    return 50;
-  }
 }
 
 class Spare extends Throw {
   isSpare() {
     return true;
   }
-
-  // need to remove this
-  value() {
-    // never gets used
-    return 50;
-  }
 }
 
-class GutterBall extends Throw {
-  value() {
-    return 0;
-  }
-}
-
-class ThrowFactory {
-  static build(throwString) {
-    switch (throwString) {
-      case 'X':
-        return new Strike(throwString);
-      case '/':
-        return new Spare(throwString);
-      case '-':
-        return new GutterBall(throwString);  
-      default: 
-        return new Throw(throwString);
-    }
-  }
-}
+class GutterBall extends Throw {}
 
 class FrameParser {
-  throws: Throw[];
-
-  constructor(frameString) {
-    this.throws = frameString.split('')
-      .map(throwString => ThrowFactory.build(throwString));
-  }
-
-  parse() {
+  parse(frameString: string) {
+    const throws = frameString.split("");
     let currentFrame = new Frame();
     let frames = [ currentFrame ];
 
-    for (let currentThrow of this.throws) {
+    for (let throwString of throws) {
       if (currentFrame.isFinished()) {
         currentFrame = frames.length === 9 ? new TenthFrame() : new Frame();
         frames.push(currentFrame);
+      }
+
+      let currentThrow;
+
+      if (throwString === 'X') {
+        currentThrow = new Strike(10);
+      } else if (throwString === '/') {
+        const spareValue = currentFrame.firstThrow() ? 10 - currentFrame.firstThrow().value() : 0;
+        currentThrow = new Spare(spareValue);
+      } else if (throwString === '-') {
+        currentThrow = new GutterBall(0);  
+      } else {
+        currentThrow = new Throw(+throwString);
       }
 
       currentFrame.addThrow(currentThrow); 
