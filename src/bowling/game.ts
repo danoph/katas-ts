@@ -137,19 +137,7 @@ class Frame {
   }
 
   score() {
-    let score = 0;
-
-    for (let ball of this.throws) {
-      if (ball.isStrike()) {
-        score += 10;
-      } else if (ball.isSpare()) {
-        score += 10 - this.firstThrow().value();
-      } else {
-        score += ball.value();
-      }
-    }
-
-    return score;
+    return this.throws.reduce((sum, ball) => sum + ball.value(), 0);
   }
 
   isFinished() {
