@@ -248,15 +248,7 @@ class TenthFrame extends Frame {
   }
 
   addThrow(ball: Throw) {
-    if (this.throws.length < 2) {
-      this.throws.push(ball);
-    } else { 
-      if (this.strikeOrSpareThrown()) {
-        this.throws.push(ball);
-      } else {
-        throw new Error(BOWLING_GAME_TOO_LONG);
-      }
-    }
+    this.throws.push(ball);
   }
 }
 
@@ -266,6 +258,10 @@ class TenthFrameValidator {
   validate() {
     if (this.frame.strikeOrSpareThrown() && this.frame.numberOfThrows() !== 3) {
       throw new Error(BOWLING_GAME_TOO_SHORT);
+    }
+
+    if (!this.frame.strikeOrSpareThrown() && this.frame.numberOfThrows() === 3) {
+      throw new Error(BOWLING_GAME_TOO_LONG);
     }
 
     if (this.frame.firstThrow().isSpare()) {
