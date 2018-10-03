@@ -130,6 +130,18 @@ class Frame {
   numberOfThrows() {
     return this.throws.length;
   }
+
+  firstThrow() {
+    return this.throws[0];
+  }
+
+  secondThrow() {
+    return this.throws[1];
+  }
+
+  thirdThrow() {
+    return this.throws[2];
+  }
 }
 
 class TenthFrame extends Frame {
@@ -158,7 +170,17 @@ class TenthFrameValidator {
       throw new Error(BOWLING_GAME_TOO_SHORT);
     }
 
+    if (this.frame.firstThrow().isSpare()) {
+      throw new Error(BOWLING_SPARE_TOO_EARLY);
+    }
 
+    if (this.frame.firstThrow().isStrike() && this.frame.secondThrow().isSpare()) {
+      throw new Error(BOWLING_SPARE_TOO_EARLY);
+    }
+
+    if (this.frame.secondThrow().isSpare() && this.frame.thirdThrow().isSpare()) {
+      throw new Error(BOWLING_SPARE_TOO_EARLY);
+    }
   }
 
 }

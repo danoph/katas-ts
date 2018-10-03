@@ -67,7 +67,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('not enough strikes', () => {
+    fdescribe('not enough strikes', () => {
       beforeEach(() => {
         frames = "X".repeat(10);
       });
@@ -87,7 +87,6 @@ fdescribe('Game', () => {
       });
     });
 
-    // I had to modify the frames variable to have a second throw since 4 is not valid
     fdescribe('too many throws throws an exception', () => {
       beforeEach(() => {
         frames = "4".repeat(21);
@@ -136,7 +135,7 @@ fdescribe('Game', () => {
       });
 
       it('throws an exception', () => {
-        for (let frame in badTenthFrames) {
+        for (let frame of badTenthFrames) {
           frames = "-".repeat(18) + frame;
           const expectedError = badTenthFrames[frame];
           expect(() => new Game(frames)).toThrowError(Error, expectedError);
@@ -160,7 +159,7 @@ fdescribe('Game', () => {
       });
 
       it('does not throw error', () => {
-        for (let frame in goodTenthFrames) {
+        for (let frame of goodTenthFrames) {
           frames = "-".repeat(18) + frame;
           expect(() => new Game(frames)).not.toThrow();
         }
