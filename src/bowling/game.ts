@@ -12,13 +12,7 @@ export class Game {
     this.frames = frameParser.parse();
 
     for (let frame of this.frames) {
-      if (frame.isTenthFrame()) {
-        const frameValidator = new TenthFrameValidator(frame);
-        frameValidator.validate();
-      } else {
-        const frameValidator = new FrameValidator(frame);
-        frameValidator.validate();
-      }
+      frame.validate();
     }
   }
 
@@ -157,6 +151,10 @@ class Frame {
   type: string;
   throws: Throw[] = [];
 
+  validate() {
+    new FrameValidator().validate(this);
+  }
+
   addThrow(ball: Throw) {
     this.throws.push(ball);
   }
@@ -233,6 +231,10 @@ class Frame {
 }
 
 class TenthFrame extends Frame {
+  validate() {
+    new TenthFrameValidator().validate(this);
+  }
+
   isFinished() {
     return this.throws.length === 3;
   }
@@ -247,49 +249,43 @@ class TenthFrame extends Frame {
 }
 
 class TenthFrameValidator {
-  constructor(private frame: TenthFrame) {}
-
-  validate() {
-    if (this.frame.strikeOrSpareThrown() && this.frame.numberOfThrows() !== 3) {
+  validate(frame: TenthFrame) {
+    if (frame.strikeOrSpareThrown() && frame.numberOfThrows() !== 3) {
       throw new Error(BOWLING_GAME_TOO_SHORT);
     }
 
-    if (!this.frame.strikeOrSpareThrown() && this.frame.numberOfThrows() === 3) {
+    if (!frame.strikeOrSpareThrown() && frame.numberOfThrows() === 3) {
       throw new Error(BOWLING_GAME_TOO_LONG);
     }
 
-    if (this.frame.firstThrow().isSpare()) {
+    if (frame.firstThrow().isSpare()) {
       throw new Error(BOWLING_SPARE_TOO_EARLY);
     }
 
-    if (this.frame.firstThrow().isStrike() && this.frame.secondThrow().isSpare()) {
+    if (frame.firstThrow().isStrike() && frame.secondThrow().isSpare()) {
       throw new Error(BOWLING_SPARE_TOO_EARLY);
     }
 
-    if (this.frame.secondThrow().isSpare() && this.frame.thirdThrow().isSpare()) {
+    if (frame.secondThrow().isSpare() && frame.thirdThrow().isSpare()) {
       throw new Error(BOWLING_SPARE_TOO_EARLY);
     }
   }
-
 }
 
 class FrameValidator {
-  constructor(private frame: Frame) {}
-
-  validate() {
-    if (this.frame.firstThrow().isSpare()) {
+  validate(frame: Frame) {
+    if (frame.firstThrow().isSpare()) {
       throw new Error(BOWLING_SPARE_TOO_EARLY);
     }
 
-    if (this.frame.secondThrow()) {
-      if (this.frame.secondThrow().isStrike()) {
+    if (frame.secondThrow()) {
+      if (frame.secondThrow().isStrike()) {
         throw new Error(BOWLING_STRIKE_TOO_LATE);
       }
 
-      if (this.frame.firstThrowValue() + this.frame.secondThrowValue() === 10 && !this.frame.secondThrow().isSpare()) {
+      if (frame.firstThrowValue() + frame.secondThrowValue() === 10 && !frame.secondThrow().isSpare()) {
         throw new Error(BOWLING_TOO_MANY_PINS);
       }
     }
-
   }
 }
