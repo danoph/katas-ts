@@ -177,21 +177,11 @@ class Frame {
   }
 
   firstThrowValue() {
-    if (this.firstThrow().isStrike()) {
-      return 10;
-    } else {
-      return this.firstThrow().value();
-    }
+    return this.firstThrow().value();
   }
 
   secondThrowValue() {
-    if (this.secondThrow().isStrike()) {
-      return 10;
-    } else if (this.secondThrow().isSpare()) {
-      return 10 - this.firstThrowValue();
-    } else {
-      return this.secondThrow().value();
-    }
+    return this.secondThrow().value();
   }
 }
 
