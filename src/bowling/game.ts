@@ -28,6 +28,9 @@ class FrameScorer {
   score() {
     let score = 0;
 
+    // const allThrows = this.frames.reduce((acc, frame) => acc.concat(frame.throws), []);
+    // console.log('allThrows', allThrows);
+
     for (let index in this.frames) {
       const frame = this.frames[+index];
       const nextFrame = this.frames[+index+1];
@@ -35,14 +38,12 @@ class FrameScorer {
 
       score += frame.score();
 
-      if (frame.spareThrown()) {
-        if (!frame.isTenthFrame()) {
+      if (!frame.isTenthFrame()) {
+        if (frame.spareThrown()) {
           score += nextFrame.firstThrowValue();
         }
-      }
 
-      if (frame.strikeThrown()) {
-        if (!frame.isTenthFrame()) {
+        if (frame.strikeThrown()) {
           score += nextFrame.firstThrowValue();
 
           if (nextFrame.strikeThrown()) {
