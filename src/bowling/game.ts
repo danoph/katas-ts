@@ -45,16 +45,11 @@ class FrameScorer {
 
         if (frame.strikeThrown()) {
           score += nextFrame.firstThrowValue();
+          score += nextFrame.secondThrowValue();
+        }
 
-          if (nextFrame.strikeThrown()) {
-            if (nextNextFrame) {
-              score += nextNextFrame.firstThrowValue();
-            } else {
-              score += nextFrame.secondThrowValue();
-            }
-          } else {
-            score += nextFrame.secondThrowValue();
-          }
+        if (frame.strikeThrown() && nextFrame.strikeThrown() && nextNextFrame) {
+          score += nextNextFrame.firstThrowValue();
         }
       }
     }
@@ -182,7 +177,7 @@ class Frame {
   }
 
   secondThrowValue() {
-    return this.secondThrow().value();
+    return this.secondThrow() ? this.secondThrow().value() : 0;
   }
 }
 
