@@ -23,7 +23,7 @@ fdescribe('Game', () => {
       });
     });
 
-    describe('perfect game', () => {
+    fdescribe('perfect game', () => {
       beforeEach(() => {
         frames = "X".repeat(12);
         game = new Game(frames);

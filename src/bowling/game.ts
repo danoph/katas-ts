@@ -29,14 +29,35 @@ class FrameScorer {
     for (let index in this.frames) {
       const frame = this.frames[+index];
       const nextFrame = this.frames[+index+1];
+      const nextNextFrame = this.frames[+index+2];
 
       score += frame.score();
 
       if (frame.spareThrown()) {
         if (!frame.isTenthFrame()) {
-          score += nextFrame.firstThrow().value();
+          score += nextFrame.firstThrowValue();
         }
       }
+
+      if (frame.strikeThrown()) {
+        if (!frame.isTenthFrame()) {
+          score += nextFrame.firstThrowValue();
+
+          if (nextFrame.isTenthFrame()) {
+            score += nextFrame.secondThrowValue();
+          }
+
+          if (nextFrame.strikeThrown()) {
+            if (nextNextFrame) {
+              score += nextNextFrame.firstThrowValue();
+            }
+          }
+          // } else {
+          //   score += nextFrame.secondThrow().value();
+          // }
+        }
+      }
+
     }
 
     return score;
@@ -200,6 +221,24 @@ class Frame {
 
   isTenthFrame() {
     return false;
+  }
+
+  firstThrowValue() {
+    if (this.firstThrow().isStrike()) {
+      return 10;
+    } else {
+      return this.firstThrow().value();
+    }
+  }
+
+  secondThrowValue() {
+    if (this.secondThrow().isStrike()) {
+      return 10;
+    } else if (this.secondThrow().isSpare()) {
+      return 10 - this.firstThrowValue();
+    } else {
+      return this.secondThrow().value();
+    }
   }
 }
 
