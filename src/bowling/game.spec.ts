@@ -135,10 +135,10 @@ describe('Game', () => {
       });
 
       it('throws an exception', () => {
-        for (let frame in badTenthFrames) {
+        for (let frame of badTenthFrames) {
           frames = "-".repeat(18) + frame;
           const expectedError = badTenthFrames[frame];
-          expect(() => new Game(frames)).toThrowError(expectedError);
+          expect(() => new Game(frames)).toThrowError(Error, expectedError);
         }
       });
     });
@@ -159,7 +159,10 @@ describe('Game', () => {
       });
 
       it('does not throw error', () => {
-        expect(() => new Game(frames)).not.toThrow();
+        for (let frame of goodTenthFrames) {
+          frames = "-".repeat(18) + frame;
+          expect(() => new Game(frames)).not.toThrow();
+        }
       });
     });
   });
