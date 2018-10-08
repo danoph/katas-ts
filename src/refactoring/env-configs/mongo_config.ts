@@ -5,9 +5,7 @@ export const getMongoDbUri = (env?: string) => {
 
   let mongoDbHost = 'localhost';
 
-  if (e === 'development' || e === 'test') {
-    mongoDbHost = 'localhost';
-  } else {
+  if (e !== 'development' && e !== 'test') {
     if (e === 'production') {
       mongoDbHost = 'prod-db.somehost.com';
     } else {
