@@ -36,9 +36,9 @@ export class Bird {
       case 'EUROPEAN':
         return 3;
       case 'AFRICAN':
-        return 20;
+        return 3;
       case 'NORWEGIAN_BLUE':
-        return 5;
+        return 10;
     }
 
     throw new Error("Invalid Bird Type");
@@ -57,33 +57,3 @@ export class Bird {
     throw new Error("Invalid Bird Type");
   }
 }
-
-//export class Bird {
-  //getBaseSpeed(): number {
-    //return 1;
-  //}
-
-  //getSpeed(): number {
-    //return 2;
-  //};
-//}
-
-//class EuropeanBird extends Bird {
-  //getSpeed(): number {
-    //return this.getBaseSpeed();
-  //}
-//}
-
-//class AfricanBird extends Bird {
-  //getSpeed(): number {
-    //return getBaseSpeed() - getLoadFactor() * numberOfCoconuts;
-  //}
-//}
-
-//class NorwegianBlueBird extends Bird {
-  //getSpeed(): number {
-    //return (isNailed) ? 0 : getBaseSpeed(voltage);
-  //}
-//}
-
-//speed = bird.getSpeed();

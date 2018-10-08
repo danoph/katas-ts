@@ -19,6 +19,12 @@ fdescribe('Bird', () => {
         expect(bird.getWeight()).toEqual(3);
       });
     });
+
+    describe('#getHeight', () => {
+      it('returns correct bird height', () => {
+        expect(bird.getHeight()).toEqual(10);
+      });
+    });
   });
 
   describe('bird is AFRICAN', () => {
@@ -34,7 +40,13 @@ fdescribe('Bird', () => {
 
     describe('#getWeight', () => {
       it('returns correct bird weight', () => {
-        expect(bird.getWeight()).toEqual(20);
+        expect(bird.getWeight()).toEqual(3);
+      });
+    });
+
+    describe('#getHeight', () => {
+      it('returns correct bird height', () => {
+        expect(bird.getHeight()).toEqual(5);
       });
     });
   });
@@ -53,7 +65,13 @@ fdescribe('Bird', () => {
 
       describe('#getWeight', () => {
         it('returns correct bird weight', () => {
-          expect(bird.getWeight()).toEqual(5);
+          expect(bird.getWeight()).toEqual(10);
+        });
+      });
+
+      describe('#getHeight', () => {
+        it('returns correct bird height', () => {
+          expect(bird.getHeight()).toEqual(10);
         });
       });
     });
@@ -71,7 +89,13 @@ fdescribe('Bird', () => {
 
       describe('#getWeight', () => {
         it('returns correct bird weight', () => {
-          expect(bird.getWeight()).toEqual(5);
+          expect(bird.getWeight()).toEqual(10);
+        });
+      });
+
+      describe('#getHeight', () => {
+        it('returns correct bird height', () => {
+          expect(bird.getHeight()).toEqual(10);
         });
       });
     });
