@@ -1,4 +1,4 @@
-import { Bird } from './polymorphism';
+import { Bird } from './bird';
 
 fdescribe('Bird', () => {
   let bird;

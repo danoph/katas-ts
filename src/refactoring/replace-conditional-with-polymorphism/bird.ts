@@ -18,6 +18,10 @@ export class Bird {
     return 2;
   }
 
+  getType() {
+    return this._type;
+  }
+
   getSpeed(): number {
     switch (this._type) {
       case 'EUROPEAN':
