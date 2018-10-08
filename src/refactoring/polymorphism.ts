@@ -34,28 +34,28 @@ export class Bird {
   getWeight(): number {
     switch (this._type) {
       case 'EUROPEAN':
-        return 1;
-      case 'AFRICAN':
-        return 2;
-      case 'NORWEGIAN_BLUE':
         return 3;
+      case 'AFRICAN':
+        return 20;
+      case 'NORWEGIAN_BLUE':
+        return 5;
     }
 
     throw new Error("Invalid Bird Type");
   }
 
-  //getHeight(): number {
-    //switch (this._type) {
-      //case 'EUROPEAN':
-        //return 5;
-      //case 'AFRICAN':
-        //return 8;
-      //case 'NORWEGIAN_BLUE':
-        //return 10;
-    //}
+  getHeight(): number {
+    switch (this._type) {
+      case 'EUROPEAN':
+        return 10;
+      case 'AFRICAN':
+        return 5;
+      case 'NORWEGIAN_BLUE':
+        return 10;
+    }
 
-    //throw new Error("Invalid Bird Type");
-  //}
+    throw new Error("Invalid Bird Type");
+  }
 }
 
 //export class Bird {

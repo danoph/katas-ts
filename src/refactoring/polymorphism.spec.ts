@@ -16,7 +16,7 @@ fdescribe('Bird', () => {
 
     describe('#getWeight', () => {
       it('returns correct bird weight', () => {
-        expect(bird.getWeight()).toEqual(1);
+        expect(bird.getWeight()).toEqual(3);
       });
     });
   });
@@ -34,7 +34,7 @@ fdescribe('Bird', () => {
 
     describe('#getWeight', () => {
       it('returns correct bird weight', () => {
-        expect(bird.getWeight()).toEqual(2);
+        expect(bird.getWeight()).toEqual(20);
       });
     });
   });
@@ -53,7 +53,7 @@ fdescribe('Bird', () => {
 
       describe('#getWeight', () => {
         it('returns correct bird weight', () => {
-          expect(bird.getWeight()).toEqual(3);
+          expect(bird.getWeight()).toEqual(5);
         });
       });
     });
@@ -71,7 +71,7 @@ fdescribe('Bird', () => {
 
       describe('#getWeight', () => {
         it('returns correct bird weight', () => {
-          expect(bird.getWeight()).toEqual(3);
+          expect(bird.getWeight()).toEqual(5);
         });
       });
     });
