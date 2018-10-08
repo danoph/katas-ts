@@ -1,4 +1,4 @@
-export class TexasHoldEm {
+export class Game {
   constructor(private cards) {}
 
   bestHand() {
