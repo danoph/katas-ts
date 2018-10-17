@@ -3,8 +3,20 @@ class NumberParser {
 
   numbers() {
     return this.numberString
+      .split("\n")
+      .join(",")
       .split(',')
-      .map(numberString => +numberString)
+      .map(numberString => {
+        //if (!numberString.length) {
+          //throw new Error('Invalid number');
+        //}
+
+        //if (isNaN(+numberString)) {
+          //throw new Error('Invalid number');
+        //}
+
+        return +numberString
+      })
   }
 }
 
