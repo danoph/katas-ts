@@ -15,5 +15,13 @@ fdescribe('String Calculator', () => {
     it('can add 1,2', () => {
       expect(subject.add('1,2')).toEqual(3);
     });
+
+    it('can add "1\n2,3"', () => {
+      expect(subject.add("1\n2,3")).toEqual(6);
+    });
+
+    it('throws error on "1,\n"', () => {
+      expect(() => subject.add("1,\n")).toThrowError(Error, 'Invalid number');
+    });
   });
 });
